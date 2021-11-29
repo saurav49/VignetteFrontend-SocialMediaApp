@@ -1,0 +1,61 @@
+.signupPage {
+  background-color: #333;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signupContainer {
+  border-radius: 1em;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  min-width: 285px;
+  margin: 0 auto;
+  padding: 1em;
+  border: none;
+  background-color: #fff;
+  color: #333;
+}
+
+.input {
+  border-radius: 1em;
+  margin: 1em 0em;
+  border: none;
+  padding: 1em 2em;
+  outline: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.btn {
+  border: none;
+  border-radius: 1em;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #333;
+  padding: 1em 2em;
+  margin: 1em 0em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inptWrapperPass {
+  margin-left: 1em;
+}
+
+.passwordIcon {
+  transform: translate(-33px, 4px);
+  padding: 0;
+  margin: 0;
+}
+
+.spanStyle {
+  margin: 0em 0.3em;
+  font-weight: bold;
+  cursor: pointer;
+}
