@@ -1,0 +1,51 @@
+.landing_wrapper {
+  height: 83.7vh;
+  padding: 0em 1em;
+  display: flex;
+  align-items: center;
+  background-color: rgb(245 245 244);
+}
+
+.landing_wrapper > div {
+  flex: 1;
+}
+
+.image_wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: pink;
+  height: 100%;
+  background-color: rgb(250 250 249);
+}
+
+.image {
+  width: 70%;
+}
+
+.user_auth_btn_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em 0em;
+}
+
+.user_auth_btn_wrapper > * {
+  margin: 1em 0em;
+}
+
+.auth_btns {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 1em;
+}
+
+@media (max-width: 777px) {
+  .image_wrapper {
+    display: none;
+  }
+}

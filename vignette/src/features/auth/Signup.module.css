@@ -1,7 +1,26 @@
 .signupPage {
-  background-color: #333;
-  height: 100vh;
+  background-color: rgb(250 250 249);
+  min-height: 83vh;
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.authImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(250 250 249);
+}
+
+.authImage > img {
+  width: 75%;
+  max-width: 500px;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -14,18 +33,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 25%;
-  min-width: 285px;
+  width: 27%;
+  min-width: 305px;
   margin: 0 auto;
   padding: 1em;
   border: none;
   background-color: #fff;
   color: #333;
+  margin: 1em 3em 1em 0em;
 }
 
 .input {
   border-radius: 1em;
-  margin: 1em 0em;
+  margin: 0.85em 0em;
   border: none;
   padding: 1em 2em;
   outline: none;
@@ -44,14 +64,20 @@
   cursor: pointer;
 }
 
-.inptWrapperPass {
-  margin-left: 1em;
+.inptImageWrapper {
+  text-align: center;
+}
+
+.inptImageWrapper > input {
+  width: 85%;
 }
 
 .passwordIcon {
-  transform: translate(-33px, 4px);
+  transform: translate(223px, -53px);
   padding: 0;
   margin: 0;
+  font-size: 1.3rem;
+  cursor: pointer;
 }
 
 .spanStyle {

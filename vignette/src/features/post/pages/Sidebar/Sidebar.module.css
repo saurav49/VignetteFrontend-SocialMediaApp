@@ -1,0 +1,19 @@
+.sidebar_wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #333;
+  width: 20%;
+  height: 80vh;
+  background-color: rgb(37, 37, 37);
+  color: #fff;
+  border-radius: 1rem;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 1em;
+  z-index: 999;
+}
+
+.brand_image_wrapper {
+}

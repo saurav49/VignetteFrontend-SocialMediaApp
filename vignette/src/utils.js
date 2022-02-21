@@ -1,3 +1,5 @@
+const CLOUD_NAME = "cloudmedia49";
+
 const checkInputField = (inputValue) => {
   return inputValue === "" ? "EMPTY" : "NOT_EMPTY";
 };
@@ -19,4 +21,10 @@ const isMatch = (password, confirmPassword) => {
   return password === confirmPassword ? true : false;
 };
 
-export { validateEmail, validatePassword, isMatch, checkInputField };
+export {
+  validateEmail,
+  validatePassword,
+  isMatch,
+  checkInputField,
+  CLOUD_NAME,
+};

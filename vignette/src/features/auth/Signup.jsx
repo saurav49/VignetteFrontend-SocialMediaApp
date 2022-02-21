@@ -7,6 +7,7 @@ import { validateEmail, validatePassword, isMatch } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "react-loader-spinner";
 import { toggleShowLoader } from "./authSlice";
+import { Navbar } from "../../components/index";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -17,14 +18,20 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showLoader, status } = useSelector((state) => state.auth);
 
   useEffect(() => {
     status === "loading" && dispatch(toggleShowLoader("TRUE"));
-    status === "fulfilled" && dispatch(toggleShowLoader("FALSE"));
-  }, [status]);
+    if (status === "fulfilled") {
+      dispatch(toggleShowLoader("FALSE"));
+      navigate("/feed");
+    }
+    status === "error" && dispatch(toggleShowLoader("FALSE"));
+  }, [status, dispatch, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,113 +45,158 @@ const Signup = () => {
       return setError("Password and Confirm Password does not match");
 
     setError("");
-
-    dispatch(signUpUser({ name, username, email, password }));
+    dispatch(signUpUser({ name, username, email, password, previewImage }));
 
     setName("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
     setUsername("");
+    setProfileImage("");
+    setPreviewImage("");
+  };
+
+  const handleImageInput = (e) => {
+    const file = e.target.files[0];
+    handlePreviewFile(file);
+  };
+
+  const handlePreviewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener("load", () => {
+      setPreviewImage(reader.result.replace(/(\r\n|\n|\r)/gm, ""));
+    });
   };
 
   return (
-    <div className={styles.signupPage}>
-      <div className={styles.signupContainer}>
-        <h2> Sign Up </h2>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.inptWrapper}>
-            <input
-              type="text"
-              value={name}
-              placeholder="Name"
-              onChange={(e) => setName(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.inptWrapper}>
-            <input
-              type="text"
-              value={username}
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.inptWrapper}>
-            <input
-              type="text"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.inptWrapperPass}>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
-            />
-            {showPassword ? (
-              <AiTwotoneEyeInvisible
-                onClick={() => setShowPassword((showPassword) => !showPassword)}
-                className={styles.passwordIcon}
+    <>
+      <Navbar />
+      <div className={styles.signupPage}>
+        <div className={styles.signupContainer}>
+          <h2 className="text-3xl text-gray-900 font-bold py-2"> Sign Up </h2>
+          <form onSubmit={handleSubmit} className={styles.formWrapper}>
+            <div className={styles.inptWrapper}>
+              <input
+                type="text"
+                value={name}
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+                className={styles.input}
               />
-            ) : (
-              <AiFillEye
-                onClick={() => setShowPassword((showPassword) => !showPassword)}
-                className={styles.passwordIcon}
+            </div>
+            <div className={styles.inptWrapper}>
+              <input
+                type="text"
+                value={username}
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
+                className={styles.input}
               />
+            </div>
+            <div className={styles.inptWrapper}>
+              <input
+                type="text"
+                value={email}
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.inptWrapperPass}>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.input}
+              />
+              {showPassword ? (
+                <AiTwotoneEyeInvisible
+                  onClick={() =>
+                    setShowPassword((showPassword) => !showPassword)
+                  }
+                  className={styles.passwordIcon}
+                />
+              ) : (
+                <AiFillEye
+                  onClick={() =>
+                    setShowPassword((showPassword) => !showPassword)
+                  }
+                  className={styles.passwordIcon}
+                />
+              )}
+            </div>
+            <div className={styles.inptWrapperPass}>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                placeholder="Confirm Password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={styles.input}
+              />
+              {showConfirmPassword ? (
+                <AiTwotoneEyeInvisible
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      (showConfirmPassword) => !showConfirmPassword
+                    )
+                  }
+                  className={styles.passwordIcon}
+                />
+              ) : (
+                <AiFillEye
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      (showConfirmPassword) => !showConfirmPassword
+                    )
+                  }
+                  className={styles.passwordIcon}
+                />
+              )}
+            </div>
+            <div className={styles.inptImageWrapper}>
+              <input
+                type="file"
+                value={profileImage}
+                placeholder="Image"
+                onChange={handleImageInput}
+                className={styles.input}
+              />
+            </div>
+            {previewImage && (
+              <div className="inptWrapper">
+                <img
+                  src={previewImage}
+                  alt="preview"
+                  style={{ height: "150px" }}
+                />
+              </div>
             )}
-          </div>
-          <div className={styles.inptWrapperPass}>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={styles.input}
-            />
-            {showConfirmPassword ? (
-              <AiTwotoneEyeInvisible
-                onClick={() =>
-                  setShowConfirmPassword(
-                    (showConfirmPassword) => !showConfirmPassword
-                  )
-                }
-                className={styles.passwordIcon}
-              />
-            ) : (
-              <AiFillEye
-                onClick={() =>
-                  setShowConfirmPassword(
-                    (showConfirmPassword) => !showConfirmPassword
-                  )
-                }
-                className={styles.passwordIcon}
-              />
-            )}
-          </div>
-          {error && <p>{error}</p>}
-          <button type="submit" className={styles.btn}>
-            {showLoader ? (
-              <Loader type="ThreeDots" color="#fff" height={13} width={120} />
-            ) : (
-              <span>create account</span>
-            )}
-          </button>
-        </form>
-        <p>
-          Already have an account?
-          <span onClick={() => navigate("/login")} className={styles.spanStyle}>
-            Log In
-          </span>
-        </p>
+            {error && <p>{error}</p>}
+            <button
+              type="submit"
+              className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-3 px-10 border-b-4 my-4 border-slate-700 hover:border-slate-500 rounded uppercase"
+            >
+              {showLoader ? (
+                <Loader type="ThreeDots" color="#fff" height={13} width={120} />
+              ) : (
+                <span>create account</span>
+              )}
+            </button>
+          </form>
+          <p>
+            Already have an account?
+            <span
+              onClick={() => navigate("/login")}
+              className={styles.spanStyle}
+            >
+              Log In
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
