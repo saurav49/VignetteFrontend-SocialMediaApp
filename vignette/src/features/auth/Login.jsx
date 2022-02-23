@@ -10,8 +10,9 @@ import { toggleShowLoader } from "./authSlice";
 import { Navbar } from "../../components/index";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const defaultUser = { email: "user3@gmail.com", password: "Users49!" };
+  const [email, setEmail] = useState(defaultUser.email);
+  const [password, setPassword] = useState(defaultUser.password);
   const [showPassword, setShowPassword] = useState(false);
   const [err, setError] = useState("");
   const navigate = useNavigate();
