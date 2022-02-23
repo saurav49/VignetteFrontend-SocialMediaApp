@@ -2,7 +2,10 @@ import { Sidebar } from "../../features/post/index";
 import { Navbar } from "../index";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getAllFollowingUserInfoAsync } from "../../features/auth/authSlice";
+import {
+  getAllFollowingUserInfoAsync,
+  unfollowUserAsync,
+} from "../../features/auth/authSlice";
 import { Image } from "cloudinary-react";
 import { CLOUD_NAME } from "../../utils";
 import Loader from "react-loader-spinner";
@@ -15,7 +18,9 @@ function Following() {
   !currentUser.hasOwnProperty("_id") &&
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));
   const dispatch = useDispatch();
-  console.log({ currentUserFollowingList }, { showLoader });
+  const handleUnfollowUser = (username) => {
+    dispatch(unfollowUserAsync(username));
+  };
 
   useEffect(() => {
     dispatch(toggleShowLoader("TRUE"));
@@ -48,7 +53,7 @@ function Following() {
                       {user.photo ? (
                         <Image
                           cloudName={`${CLOUD_NAME}`}
-                          publicId={currentUser.photo.id}
+                          publicId={user.photo.id}
                           width="300"
                           crop="scale"
                           className="align-middle w-full h-full rounded-2xl"
@@ -64,7 +69,10 @@ function Following() {
                         <p>{user.name}</p>
                         <p>@{user.username}</p>
                       </div>
-                      <button className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-1 px-5 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4">
+                      <button
+                        className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4"
+                        onClick={() => handleUnfollowUser(user.username)}
+                      >
                         unfollow
                       </button>
                     </div>

@@ -5,6 +5,9 @@ import {
   GET_USER_API,
   GET_ALL_FOLLOWERS_API,
   GET_ALL_FOLLOWING_API,
+  UNFOLLOW_USER_API,
+  GET_ALL_USER_API,
+  FOLLOW_USER_API,
 } from "../urls";
 import { toast } from "react-toastify";
 
@@ -98,10 +101,67 @@ const getAllFollowerUserInfo = async () => {
     toast.error(error.response.data.errorMessage);
   }
 };
+const unfollowUser = async (username) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.get(`${UNFOLLOW_USER_API}/${username}`);
+      return response;
+    } else {
+      const response = await axios.get(`${UNFOLLOW_USER_API}/${username}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.ddta.errorMessage);
+  }
+};
+
+const getAllUser = async () => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.get(GET_ALL_USER_API);
+      return response;
+    } else {
+      const response = await axios.get(GET_ALL_USER_API, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMessage);
+  }
+};
+
+const followUser = async (username) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.get(`${FOLLOW_USER_API}/${username}`);
+      return response;
+    } else {
+      const response = await axios.get(`${FOLLOW_USER_API}/${username}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMessage);
+  }
+};
+
 export {
   HandleLoginUser,
   HandleSignUpUser,
   fetchUserDetails,
   getAllFollowingUserInfo,
   getAllFollowerUserInfo,
+  unfollowUser,
+  getAllUser,
+  followUser,
 };

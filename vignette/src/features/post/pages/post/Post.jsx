@@ -65,7 +65,10 @@ const Post = ({ post }) => {
         <>
           {post.retweet.map((userInfo) => {
             return (
-              <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
+              <div
+                className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2"
+                key={userInfo._id}
+              >
                 <div className="flex items-center mb-4 ml-1 mt-2 text-white opacity-70 text-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

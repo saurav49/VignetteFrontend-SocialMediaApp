@@ -17,7 +17,6 @@ function User() {
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log({ currentUser });
   const handleUserClick = (type) => {
     switch (type) {
       case "FOLLOWING":
@@ -78,6 +77,7 @@ function User() {
             </div>
             <div>
               <a
+                href="/following"
                 className="mr-4 text-white opacity-50 hover:opacity-100 cursor-pointer font-bold"
                 onClick={() => handleUserClick("FOLLOWING")}
               >
@@ -87,6 +87,7 @@ function User() {
                 Following
               </a>
               <a
+                href="/follower"
                 className="mr-2 text-white opacity-50 hover:opacity-100 cursor-pointer font-bold"
                 onClick={() => handleUserClick("FOLLOWER")}
               >

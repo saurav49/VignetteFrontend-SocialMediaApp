@@ -177,14 +177,26 @@ export const postSlice = createSlice({
     },
     [fetchAllPostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
+      const getUniqueArray = (posts) => {
+        const flag = {};
+        const unique = [];
+        posts.forEach((post) => {
+          if (!flag[post._id]) {
+            flag[post._id] = true;
+            unique.push(post);
+          }
+        });
+        return unique;
+      };
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.cursor = action.payload.paging.cursor;
         state.hasMore = action.payload.paging.hasMore;
-        state.allPost = [
-          ...new Set([...state.allPost, ...action.payload.postList]),
-        ];
+        state.allPost = getUniqueArray([
+          ...state.allPost,
+          ...action.payload.postList,
+        ]);
       }
+      state.isPostLoading = false;
     },
     [fetchAllPostAsync.rejected]: (state) => {
       state.status = "error";
@@ -194,7 +206,6 @@ export const postSlice = createSlice({
     },
     [addCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
-      console.log(action.payload, action.payload.comment);
       if (action.payload && action.payload.success) {
         state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
@@ -320,7 +331,7 @@ export const postSlice = createSlice({
         state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
-            ? { ...post, retweet: [...post.retweet, action.payload.userId] }
+            ? { ...post, retweet: [...post.retweet, action.payload.retweet] }
             : { ...post }
         );
       }
@@ -340,7 +351,7 @@ export const postSlice = createSlice({
             ? {
                 ...post,
                 retweet: post.retweet.filter(
-                  (userId) => userId !== action.payload.userId
+                  (user) => user._id !== action.payload.userId
                 ),
               }
             : { ...post }

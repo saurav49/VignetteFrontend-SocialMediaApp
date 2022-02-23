@@ -8,6 +8,7 @@ import {
   User,
   Following,
   Follower,
+  Search,
 } from "./components/index";
 import { Feed, Comment } from "./features/post/index";
 import { Notification } from "./features/notification/index";
@@ -64,6 +65,9 @@ function App() {
         </Route>
         <Route path="/following" element={<PrivateRoute />}>
           <Route path="/following" element={<Following />} />
+        </Route>
+        <Route path="/search" element={<PrivateRoute />}>
+          <Route path="/search" element={<Search />} />
         </Route>
       </Routes>
     </div>

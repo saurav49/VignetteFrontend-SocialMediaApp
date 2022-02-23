@@ -5,6 +5,9 @@ import {
   fetchUserDetails,
   getAllFollowingUserInfo,
   getAllFollowerUserInfo,
+  unfollowUser,
+  followUser,
+  getAllUser,
 } from "../../services/auth";
 
 export const getUser = createAsyncThunk("auth/getUser", async (token) => {
@@ -51,7 +54,6 @@ export const getAllFollowingUserInfoAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getAllFollowingUserInfo();
-      console.log({ response });
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -64,7 +66,42 @@ export const getAllFollowerUserInfoAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getAllFollowerUserInfo();
-      console.log({ response });
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const unfollowUserAsync = createAsyncThunk(
+  "auth/unfollowUserAsync",
+  async (username) => {
+    try {
+      const response = await unfollowUser(username);
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const followUserAsync = createAsyncThunk(
+  "auth/followUserAsync",
+  async (username) => {
+    try {
+      const response = await followUser(username);
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const getAllUserAsync = createAsyncThunk(
+  "auth/getAllUserAsync",
+  async () => {
+    try {
+      const response = await getAllUser();
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -83,6 +120,7 @@ export const authSlice = createSlice({
     currentUser: {},
     currentUserFollowingList: [],
     currentUserFollowerList: [],
+    allUsers: [],
   },
 
   reducers: {
@@ -145,7 +183,6 @@ export const authSlice = createSlice({
       state.status = "loading";
     },
     [getUser.fulfilled]: (state, action) => {
-      console.log({ action });
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         state.showLoader = false;
@@ -185,6 +222,51 @@ export const authSlice = createSlice({
       }
     },
     [getAllFollowerUserInfoAsync.rejected]: (state) => {
+      state.status = "error";
+    },
+    [unfollowUserAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [unfollowUserAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.showLoader = false;
+        console.log(state.currentUserFollowerList, action.payload.reqdUser);
+        state.currentUserFollowingList = state.currentUserFollowingList.filter(
+          (user) => user._id !== action.payload.reqdUser._id
+        );
+      }
+    },
+    [unfollowUserAsync.rejected]: (state) => {
+      state.status = "error";
+    },
+    [followUserAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [followUserAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.showLoader = false;
+        state.currentUserFollowingList = [
+          ...state.currentUserFollowerList,
+          action.payload.reqdUser,
+        ];
+      }
+    },
+    [followUserAsync.rejected]: (state) => {
+      state.status = "error";
+    },
+    [getAllUserAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getAllUserAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.showLoader = false;
+        state.allUsers = action.payload.allUsers;
+      }
+    },
+    [getAllUserAsync.rejected]: (state) => {
       state.status = "error";
     },
   },
