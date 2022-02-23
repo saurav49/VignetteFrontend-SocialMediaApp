@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Sidebar } from "../../features/post/index";
 import { Navbar } from "../../components/index";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../utils";
 import {
   handleLogout,
   getAllFollowingUserInfoAsync,
@@ -53,11 +53,8 @@ function User() {
             <div className="flex items-center justify-start mb-5">
               <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
                 {currentUser.photo && currentUser.photo.id ? (
-                  <Image
-                    cloudName={`${CLOUD_NAME}`}
-                    publicId={currentUser.photo.id}
-                    width="300"
-                    crop="scale"
+                  <AdvancedImage
+                    cldImg={cld.image(`${currentUser.photo.id}`)}
                     className="align-middle w-full h-full rounded-2xl"
                   />
                 ) : (

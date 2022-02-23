@@ -4,8 +4,8 @@ import { Sidebar } from "../../features/post/index";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUserAsync } from "../../features/auth/authSlice";
 import Loader from "react-loader-spinner";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../utils";
 import {
   unfollowUserAsync,
   followUserAsync,
@@ -110,11 +110,8 @@ function Search() {
                     >
                       <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center shadow-md">
                         {user.photo ? (
-                          <Image
-                            cloudName={`${CLOUD_NAME}`}
-                            publicId={user.photo.id}
-                            width="300"
-                            crop="scale"
+                          <AdvancedImage
+                            cldImg={cld.image(`${user.photo.id}`)}
                             className="align-middle w-full h-full rounded-2xl"
                           />
                         ) : (

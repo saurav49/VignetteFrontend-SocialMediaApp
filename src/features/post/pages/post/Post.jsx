@@ -1,7 +1,8 @@
 import React from "react";
-import { Image } from "cloudinary-react";
+// import { Image } from "cloudinary-react";
+import { AdvancedImage } from "@cloudinary/react";
 import { useDispatch } from "react-redux";
-import { CLOUD_NAME } from "../../../../utils";
+import { cld } from "../../../../utils";
 import {
   upvoteCommentAsync,
   downvoteCommentAsync,
@@ -20,11 +21,11 @@ const Post = ({ post }) => {
         <div className="w-full flex items-center">
           <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
             {post.userId.photo && post.userId.photo.id ? (
-              <Image
-                cloudName={`${CLOUD_NAME}`}
-                publicId={post.userId.photo.id}
-                width="300"
-                crop="scale"
+              <AdvancedImage
+                cldImg={cld.image(`${post.userId.photo.id}`)}
+                // publicId={post.userId.photo.id}
+                // width="300"
+                // crop="scale"
                 className="align-middle w-full h-full rounded-2xl"
               />
             ) : (
@@ -89,11 +90,12 @@ const Post = ({ post }) => {
                 <div className="w-full flex items-center">
                   <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
                     {post.userId.photo && post.userId.photo.id ? (
-                      <Image
-                        cloudName={`${CLOUD_NAME}`}
-                        publicId={post.userId.photo.id}
-                        width="300"
-                        crop="scale"
+                      <AdvancedImage
+                        // cloudName={`${CLOUD_NAME}`}
+                        // publicId={post.userId.photo.id}
+                        // width="300"
+                        // crop="scale"
+                        cldImg={cld.image(`${post.userId.photo.id}`)}
                         className="align-middle w-full h-full rounded-2xl"
                       />
                     ) : (

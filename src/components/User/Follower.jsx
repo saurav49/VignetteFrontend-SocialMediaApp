@@ -3,8 +3,8 @@ import { Navbar } from "../index";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getAllFollowerUserInfoAsync } from "../../features/auth/authSlice";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../utils";
 import Loader from "react-loader-spinner";
 import { toggleShowLoader } from "../../features/auth/authSlice";
 
@@ -46,11 +46,8 @@ function Follower() {
                   >
                     <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center shadow-md">
                       {user.photo ? (
-                        <Image
-                          cloudName={`${CLOUD_NAME}`}
-                          publicId={user.photo.id}
-                          width="300"
-                          crop="scale"
+                        <AdvancedImage
+                          cldImg={cld.image(`${user.photo.id}`)}
                           className="align-middle w-full h-full rounded-2xl"
                         />
                       ) : (

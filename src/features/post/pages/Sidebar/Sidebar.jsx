@@ -1,11 +1,12 @@
 import React from "react";
 import { BrandIcon } from "../../../../components/index";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Sidebar = ({ name, username, photo }) => {
+  const navigate = useNavigate();
   return (
     <aside className="h-[97%] w-[15rem] p-3 bg-darkGrey rounded-lg  flex flex-col shadow-md fixed top-3 bottom-1 left-3 justify-between">
       <nav>
@@ -22,11 +23,8 @@ const Sidebar = ({ name, username, photo }) => {
       <div className="flex items-center justify-between text-white">
         <div className="flex items-center space-x-3">
           {photo && photo.id ? (
-            <Image
-              cloudName={`${CLOUD_NAME}`}
-              publicId={photo.id}
-              width="300"
-              crop="scale"
+            <AdvancedImage
+              cldImg={cld.image(`${photo.id}`)}
               className="rounded-2xl w-14 h-14 "
             />
           ) : (
@@ -39,7 +37,10 @@ const Sidebar = ({ name, username, photo }) => {
             <span className="text-sm">@{username}</span>
           </div>
         </div>
-        <button className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in">
+        <button
+          className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in"
+          onClick={() => navigate("/profile")}
+        >
           {icons["gear"]}
         </button>
       </div>

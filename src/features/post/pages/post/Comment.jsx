@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Sidebar, CreatePost } from "../../index";
 import { Navbar } from "../../../../components/index";
 import { fetchAllPostAsync } from "../../postSlice";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../../../utils";
 import { UserAction } from "./Post";
 
 const Comment = () => {
@@ -75,11 +75,8 @@ const UserComment = ({ comment, requiredPost }) => {
           comment.commentOwner &&
           comment.commentOwner.photo &&
           comment.commentOwner.photo.id ? (
-            <Image
-              cloudName={`${CLOUD_NAME}`}
-              publicId={comment.commentOwner.photo.id}
-              width="300"
-              crop="scale"
+            <AdvancedImage
+              cldImg={cld.image(`${comment.commentOwner.photo.id}`)}
               className="align-middle w-full h-full rounded-2xl"
             />
           ) : (
@@ -124,11 +121,8 @@ const RequiredComment = ({ userInfo, comment, requiredPost }) => {
       <div className="w-full flex items-center">
         <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
           {userInfo && userInfo.photo && userInfo.photo.id ? (
-            <Image
-              cloudName={`${CLOUD_NAME}`}
-              publicId={userInfo.photo.id}
-              width="300"
-              crop="scale"
+            <AdvancedImage
+              cldImg={cld.image(`${userInfo.photo.id}`)}
               className="align-middle w-full h-full rounded-2xl"
             />
           ) : (
