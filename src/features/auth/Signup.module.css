@@ -35,19 +35,18 @@
   justify-content: center;
   width: 27%;
   min-width: 305px;
-  margin: 0 auto;
+  margin: 1em auto;
   padding: 1em;
   border: none;
   background-color: #fff;
   color: #333;
-  margin: 1em 3em 1em 0em;
 }
 
 .input {
   border-radius: 1em;
   margin: 0.85em 0em;
   border: none;
-  padding: 1em 2em;
+  padding: 1em;
   outline: none;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
