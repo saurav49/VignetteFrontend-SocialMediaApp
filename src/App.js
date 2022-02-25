@@ -40,7 +40,7 @@ function App() {
     if (!currentUser.hasOwnProperty("_id")) {
       dispatch(addUserInfo(JSON.parse(localStorage.getItem("currentUser"))));
     }
-  }, [status]);
+  }, [status, currentUser, dispatch]);
 
   return (
     <div className="App">
