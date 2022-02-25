@@ -4,7 +4,7 @@ import { Image } from "cloudinary-react";
 import { CLOUD_NAME } from "../../../../utils";
 import { createPostAsync, addCommentAsync } from "../../postSlice";
 
-const CreatePost = ({ type, id }) => {
+const CreatePost = ({ type, id, placeholder }) => {
   const [postContent, setPostContent] = useState("");
   const dispatch = useDispatch();
   let { currentUser } = useSelector((state) => state.auth);
@@ -52,8 +52,8 @@ const CreatePost = ({ type, id }) => {
       </div>
       <div className="w-ful">
         <textarea
-          className="mt-4 w-full py-4 px-1 bg-darkGrey text-white rounded-xl"
-          placeholder="Describe yourself here..."
+          className="mt-4 w-full py-4 px-2 bg-darkGrey text-white rounded-xl"
+          placeholder={placeholder}
           value={postContent}
           onChange={handlePostContent}
         ></textarea>

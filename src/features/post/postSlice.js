@@ -9,12 +9,14 @@ import {
   retweetPostToDb,
   unlikePostToDb,
   removeRetweetPostToDb,
+  deletePost,
 } from "../../services/post";
 
 const initialState = {
   status: "idle",
   allPost: [],
   isPostLoading: false,
+  showDeleteModal: false,
   cursor: null,
   hasMore: true,
   isError: false,
@@ -27,6 +29,18 @@ export const createPostAsync = createAsyncThunk(
   async (postContent) => {
     try {
       const response = await createPost(postContent);
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const deletePostAsync = createAsyncThunk(
+  "post/deletePostAsync",
+  async (postId) => {
+    try {
+      const response = await deletePost(postId);
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -155,6 +169,11 @@ export const postSlice = createSlice({
     },
     updateCurrentPage: (state, action) => {
       return { ...state, currentPage: action.payload };
+    },
+    toggleDeleteModal: (state, action) => {
+      return action.payload === "TRUE"
+        ? { ...state, showDeleteModal: true }
+        : { ...state, showDeleteModal: false };
     },
   },
   extraReducers: {
@@ -361,8 +380,24 @@ export const postSlice = createSlice({
     [removeRetweetPostToAsync.rejected]: (state) => {
       state.status = "error";
     },
+    [deletePostAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [deletePostAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.allPost = state.allPost.filter(
+          (post) => post._id !== action.payload.postId
+        );
+        state.isPostLoading = false;
+      }
+    },
+    [deletePostAsync.rejected]: (state) => {
+      state.status = "error";
+    },
   },
 });
 
-export const { togglePostLoading, updateCurrentPage } = postSlice.actions;
+export const { togglePostLoading, updateCurrentPage, toggleDeleteModal } =
+  postSlice.actions;
 export default postSlice.reducer;

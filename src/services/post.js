@@ -235,6 +235,24 @@ const removeRetweetPostToDb = async (postId) => {
   }
 };
 
+const deletePost = async (postId) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.delete(`${POST_API}/${postId}`);
+      return response;
+    } else {
+      const response = await axios.delete(`${POST_API}/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMesssage);
+  }
+};
+
 export {
   createPost,
   getAllPost,
@@ -245,4 +263,5 @@ export {
   retweetPostToDb,
   unlikePostToDb,
   removeRetweetPostToDb,
+  deletePost,
 };

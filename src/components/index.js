@@ -5,6 +5,7 @@ import { User } from "./User/User";
 import { Following } from "./User/Following";
 import { Follower } from "./User/Follower";
 import { Search } from "./Search/Search";
+import { Modal } from "./Modal/Modal";
 
 export {
   Navbar,
@@ -15,4 +16,5 @@ export {
   Following,
   Follower,
   Search,
+  Modal
 };

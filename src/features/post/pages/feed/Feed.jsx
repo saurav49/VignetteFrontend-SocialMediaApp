@@ -21,7 +21,7 @@ const Feed = () => {
   }, [cursor, hasMore, dispatch]);
 
   return (
-    <div className="bg-codGray h-full w-screen flex items-center">
+    <div className="bg-codGray min-h-screen w-screen flex items-center">
       <Sidebar
         name={currentUser.name}
         username={currentUser.username}
@@ -29,7 +29,7 @@ const Feed = () => {
       />
       <div className="w-full flex flex-col items-center ml-64 pl-1 pr-2 pb-60">
         <Navbar />
-        <CreatePost />
+        <CreatePost placeholder={"Describe yourself here..."} />
         {isPostLoading ? (
           <div className="mt-10">
             <Loader type="ThreeDots" color="#fff" height={100} width={100} />

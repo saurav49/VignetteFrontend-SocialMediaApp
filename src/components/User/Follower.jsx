@@ -9,13 +9,10 @@ import Loader from "react-loader-spinner";
 import { toggleShowLoader } from "../../features/auth/authSlice";
 
 function Follower() {
-  let { currentUser, currentUserFollowerList, showLoader } = useSelector(
-    (state) => state.auth
-  );
+  let { currentUser, showLoader } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));
   const dispatch = useDispatch();
-  console.log({ currentUserFollowerList });
 
   useEffect(() => {
     dispatch(toggleShowLoader("TRUE"));
@@ -37,8 +34,8 @@ function Follower() {
           </div>
         ) : (
           <div className="h-screen w-full flex flex-col items-center">
-            {currentUserFollowerList.length > 0 ? (
-              currentUserFollowerList.map((user) => {
+            {currentUser.followers.length > 0 ? (
+              currentUser.followers.map((user) => {
                 return (
                   <div
                     key={user._id}

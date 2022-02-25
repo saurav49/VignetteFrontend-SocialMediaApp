@@ -1,7 +1,6 @@
 import React from "react";
-// import { Image } from "cloudinary-react";
 import { AdvancedImage } from "@cloudinary/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cld } from "../../../../utils";
 import {
   upvoteCommentAsync,
@@ -10,37 +9,52 @@ import {
   unlikePostToAsync,
   removeRetweetPostToAsync,
   retweetPostAsync,
+  toggleDeleteModal,
 } from "../../postSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Modal } from "../../../../components/index";
 
 const Post = ({ post }) => {
+  const dispatch = useDispatch();
+  const { showDeleteModal } = useSelector((state) => state.post);
+  const handleDeletePost = () => {
+    dispatch(toggleDeleteModal("TRUE"));
+  };
   return (
     <>
+      {showDeleteModal && <Modal postId={post._id} />}
       <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
-        <div className="w-full flex items-center">
-          <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
-            {post.userId.photo && post.userId.photo.id ? (
-              <AdvancedImage
-                cldImg={cld.image(`${post.userId.photo.id}`)}
-                // publicId={post.userId.photo.id}
-                // width="300"
-                // crop="scale"
-                className="align-middle w-full h-full rounded-2xl"
-              />
-            ) : (
-              <span className="font-bold text-2xl text-white uppercase">
-                {post.userId.name[0]}
-              </span>
-            )}
+        <div className="w-full flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
+              {post.userId.photo && post.userId.photo.id ? (
+                <AdvancedImage
+                  cldImg={cld.image(`${post.userId.photo.id}`)}
+                  className="align-middle w-full h-full rounded-2xl"
+                />
+              ) : (
+                <span className="font-bold text-2xl text-white uppercase">
+                  {post.userId.name[0]}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center flex-col ml-3">
+              <p className="text-white text-opacity-90 text-xl font-bold mb-1">
+                {post.userId.name}
+              </p>
+              <p className="text-white text-opacity-90 font-medium text-sm">
+                @{post.userId.username}
+              </p>
+            </div>
           </div>
-          <div className="flex items-center flex-col ml-3">
-            <p className="text-white text-opacity-90 text-xl font-bold mb-1">
-              {post.userId.name}
-            </p>
-            <p className="text-white text-opacity-90 font-medium text-sm">
-              @{post.userId.username}
-            </p>
+          <div className="self-end mb-3">
+            <button
+              className="mb-6 mr-1 transition-all duration-500 text-white opacity-50 hover:opacity-100 focus:translate-y-1"
+              onClick={handleDeletePost}
+            >
+              {icons["delete_icon"]}
+            </button>
           </div>
         </div>
         <div className="w-full flex items-center justify-start my-2 mt-4">
@@ -91,10 +105,6 @@ const Post = ({ post }) => {
                   <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
                     {post.userId.photo && post.userId.photo.id ? (
                       <AdvancedImage
-                        // cloudName={`${CLOUD_NAME}`}
-                        // publicId={post.userId.photo.id}
-                        // width="300"
-                        // crop="scale"
                         cldImg={cld.image(`${post.userId.photo.id}`)}
                         className="align-middle w-full h-full rounded-2xl"
                       />
@@ -232,6 +242,22 @@ const UserActionIcon = (props) => {
 };
 
 const icons = {
+  delete_icon: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  ),
   dots_verticle: (
     <svg
       xmlns="http://www.w3.org/2000/svg"

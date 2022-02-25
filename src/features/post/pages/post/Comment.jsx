@@ -26,7 +26,7 @@ const Comment = () => {
   }, [id, allPost]);
 
   return (
-    <div className="bg-codGray h-full w-screen flex items-center">
+    <div className="bg-codGray min-h-screen w-screen flex items-center">
       <Sidebar
         name={currentUser.name}
         username={currentUser.username}
@@ -42,10 +42,18 @@ const Comment = () => {
             requiredPost={requiredPost}
           />
         )}
-        {requiredPost && <CreatePost type={"COMMENT"} id={requiredPost._id} />}
-        <h3 className="text-white text-xl text-center border-b-2 pb-3 my-2 w-[90%]">
-          Replies
-        </h3>
+        {requiredPost && (
+          <CreatePost
+            type={"COMMENT"}
+            id={requiredPost._id}
+            placeholder="comment here..."
+          />
+        )}
+        {requiredPost.comments.length > 0 && (
+          <h3 className="text-white text-xl text-center border-b-2 pb-3 my-2 w-[90%]">
+            Replies
+          </h3>
+        )}
         <hr />
         {requiredPost &&
           requiredPost.comments &&
@@ -65,11 +73,8 @@ const Comment = () => {
 
 const UserComment = ({ comment, requiredPost }) => {
   return (
-    <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
-      <div
-        className="w-full flex items-center"
-        style={{ border: "10px solid red" }}
-      >
+    <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-4">
+      <div className="w-full flex items-center">
         <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
           {comment &&
           comment.commentOwner &&

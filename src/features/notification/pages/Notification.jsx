@@ -21,7 +21,6 @@ function Notification() {
     dispatch(toggleNotificationLoader("TRUE"));
     dispatch(getAllNotificationAsync());
   }, [dispatch]);
-  console.log({ isNotificationLoading });
 
   return (
     <div className="bg-codGray h-full w-screen flex items-center">

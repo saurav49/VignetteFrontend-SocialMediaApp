@@ -9,6 +9,7 @@ import { cld } from "../../utils";
 import {
   unfollowUserAsync,
   followUserAsync,
+  toggleShowLoader,
 } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 
@@ -22,14 +23,18 @@ function Search() {
   const [searchText, setSearchText] = useState("");
   const [userList, setUserList] = useState([]);
   const hancleCheckFollowStatus = (userId) => {
-    return currentUser.following.find((id) => id === userId) !== undefined;
+    return (
+      currentUser.following.find((user) => user._id === userId) !== undefined
+    );
   };
   const handleFollowBtnClick = (username, reqType) => {
     switch (reqType) {
       case "UNFOLLOW":
+        dispatch(toggleShowLoader("TRUE"));
         dispatch(unfollowUserAsync(username));
         break;
       case "FOLLOW":
+        dispatch(toggleShowLoader("TRUE"));
         dispatch(followUserAsync(username));
         break;
       default:
@@ -126,23 +131,48 @@ function Search() {
                           <p>@{user.username}</p>
                         </div>
                         {hancleCheckFollowStatus(user._id) ? (
-                          <button
-                            className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4"
-                            onClick={() =>
-                              handleFollowBtnClick(user.username, "UNFOLLOW")
-                            }
-                          >
-                            unfollow
-                          </button>
+                          <>
+                            {showLoader ? (
+                              <Loader
+                                type="ThreeDots"
+                                color="#fff"
+                                height={100}
+                                width={100}
+                              />
+                            ) : (
+                              <button
+                                className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4"
+                                onClick={() =>
+                                  handleFollowBtnClick(
+                                    user.username,
+                                    "UNFOLLOW"
+                                  )
+                                }
+                              >
+                                unfollow
+                              </button>
+                            )}
+                          </>
                         ) : (
-                          <button
-                            className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4"
-                            onClick={() =>
-                              handleFollowBtnClick(user.username, "FOLLOW")
-                            }
-                          >
-                            follow
-                          </button>
+                          <>
+                            {showLoader ? (
+                              <Loader
+                                type="ThreeDots"
+                                color="#fff"
+                                height={100}
+                                width={100}
+                              />
+                            ) : (
+                              <button
+                                className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-0 rounded self-end mb-3 mr-4 mt-4"
+                                onClick={() =>
+                                  handleFollowBtnClick(user.username, "FOLLOW")
+                                }
+                              >
+                                follow
+                              </button>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>

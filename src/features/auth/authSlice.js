@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import {
   HandleLoginUser,
   HandleSignUpUser,
@@ -118,8 +118,6 @@ export const authSlice = createSlice({
     token: "",
     userId: "",
     currentUser: {},
-    currentUserFollowingList: [],
-    currentUserFollowerList: [],
     allUsers: [],
   },
 
@@ -133,6 +131,12 @@ export const authSlice = createSlice({
       return action.payload === "TRUE"
         ? { ...state, showLoader: true }
         : { ...state, showLoader: false };
+    },
+    addUserInfo: (state, action) => {
+      return {
+        ...state,
+        currentUser: action.payload,
+      };
     },
   },
 
@@ -205,7 +209,7 @@ export const authSlice = createSlice({
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         state.showLoader = false;
-        state.currentUserFollowingList = action.payload.reqdUser;
+        state.currentUser.following = action.payload.reqdUser;
       }
     },
     [getAllFollowingUserInfoAsync.rejected]: (state) => {
@@ -218,7 +222,7 @@ export const authSlice = createSlice({
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         state.showLoader = false;
-        state.currentUserFollowerList = action.payload.reqdUser;
+        state.currentUser.followers = action.payload.reqdUser;
       }
     },
     [getAllFollowerUserInfoAsync.rejected]: (state) => {
@@ -231,8 +235,7 @@ export const authSlice = createSlice({
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         state.showLoader = false;
-        console.log(state.currentUserFollowerList, action.payload.reqdUser);
-        state.currentUserFollowingList = state.currentUserFollowingList.filter(
+        state.currentUser.following = state.currentUser.following.filter(
           (user) => user._id !== action.payload.reqdUser._id
         );
       }
@@ -247,10 +250,7 @@ export const authSlice = createSlice({
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         state.showLoader = false;
-        state.currentUserFollowingList = [
-          ...state.currentUserFollowerList,
-          action.payload.reqdUser,
-        ];
+        state.currentUser.following.push(action.payload.reqdUser);
       }
     },
     [followUserAsync.rejected]: (state) => {
@@ -272,6 +272,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { handleLogout, toggleShowLoader } = authSlice.actions;
+export const { handleLogout, toggleShowLoader, addUserInfo } =
+  authSlice.actions;
 
 export default authSlice.reducer;

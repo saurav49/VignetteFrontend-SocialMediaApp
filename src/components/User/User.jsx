@@ -33,6 +33,7 @@ function User() {
         break;
     }
   };
+  console.log({ currentUser });
   return (
     <div className="bg-codGray h-full w-screen flex items-center ">
       <Sidebar

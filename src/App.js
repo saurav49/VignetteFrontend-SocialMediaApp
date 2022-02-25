@@ -12,15 +12,19 @@ import {
 } from "./components/index";
 import { Feed, Comment } from "./features/post/index";
 import { Notification } from "./features/notification/index";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addUserInfo } from "./features/auth/authSlice";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App() {
-  const { status } = useSelector((state) => state.auth);
+  const { status, currentUser } = useSelector((state) => state.auth);
   const token = JSON.parse(localStorage.getItem("token"));
+  const dispatch = useDispatch();
+
+  // add token to header if present
   useEffect(() => {
     (function () {
       if (token) {
@@ -30,6 +34,13 @@ function App() {
       delete axios.defaults.headers.common["Authorization"];
     })();
   }, [status, token]);
+
+  // initialize user
+  useEffect(() => {
+    if (!currentUser.hasOwnProperty("_id")) {
+      dispatch(addUserInfo(JSON.parse(localStorage.getItem("currentUser"))));
+    }
+  }, [status]);
 
   return (
     <div className="App">
