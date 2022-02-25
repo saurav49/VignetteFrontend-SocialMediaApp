@@ -194,6 +194,8 @@ const UserAction = (props) => {
         break;
     }
   };
+
+  console.log({ props });
   return (
     <div
       className="p-2 text-white cursor-pointer opacity-50 hover:opacity-100 flex items-center"
