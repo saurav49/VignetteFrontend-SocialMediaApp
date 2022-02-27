@@ -154,6 +154,8 @@ const addUpvoteToCommentDb = async (postId, commentId) => {
       return response;
     }
   } catch (error) {
+    toast(error.response.data.errorMesssage);
+    console.log({ error });
     toast.error(error.response.data.errorMesssage);
   }
 };

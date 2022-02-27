@@ -194,8 +194,6 @@ const UserAction = (props) => {
         break;
     }
   };
-
-  console.log({ props });
   return (
     <div
       className="p-2 text-white cursor-pointer opacity-50 hover:opacity-100 flex items-center"
@@ -208,6 +206,7 @@ const UserAction = (props) => {
         post={props.post}
         currentUser={props.currentUser}
         type={props.type}
+        commentId={props.commentId}
       />
       <span className="ml-2">
         {props.post[props.type] && props.post[props.type].length}
@@ -230,14 +229,30 @@ const UserActionIcon = (props) => {
     <>
       {props.type === "likes" || props.type === "retweet" ? (
         isOccured ? (
-          <div className="text-sky-400 opacity:50 hover:opacity-100">
+          <div className="text-sky-400 opacity:50 hover:opacity-100 flex items-center">
             {icons[props.icon]}
+            <span className="ml-2">{props.post[props.type].length}</span>
           </div>
         ) : (
           icons[props.icon]
         )
       ) : (
-        icons[props.icon]
+        <>
+          {(props.type === "upvote") | (props.type === "downvote") ? (
+            <div className="text-sky-400 opacity:50 hover:opacity-100 flex items-center">
+              {icons[props.icon]}
+              <span className="ml-2">
+                {
+                  props.post.comments.find(
+                    (comment) => comment._id === props.commentId
+                  )[props.type].length
+                }
+              </span>
+            </div>
+          ) : (
+            <>{icons[props.icon]}</>
+          )}
+        </>
       )}
     </>
   );

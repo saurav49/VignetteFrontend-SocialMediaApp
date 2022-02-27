@@ -49,7 +49,7 @@ const Comment = () => {
             placeholder="comment here..."
           />
         )}
-        {requiredPost.comments.length > 0 && (
+        {requiredPost && requiredPost.comments.length > 0 && (
           <h3 className="text-white text-xl text-center border-b-2 pb-3 my-2 w-[90%]">
             Replies
           </h3>
@@ -63,6 +63,7 @@ const Comment = () => {
                 comment={comment}
                 key={comment._id}
                 requiredPost={requiredPost}
+                currentUser={currentUser}
               />
             );
           })}
@@ -71,7 +72,14 @@ const Comment = () => {
   );
 };
 
-const UserComment = ({ comment, requiredPost }) => {
+const UserComment = ({ comment, requiredPost, currentUser }) => {
+  const isAlreadyUpvotedDownvoted = (commentId, userId, actionType) => {
+    return (
+      requiredPost.comments
+        .find((comment) => comment._id === commentId)
+        [actionType].find((id) => id === userId) !== undefined
+    );
+  };
   return (
     <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-4">
       <div className="w-full flex items-center">
@@ -103,18 +111,36 @@ const UserComment = ({ comment, requiredPost }) => {
         <p className="text-white">{comment.comment}</p>
       </div>
       <div className="flex items-center justify-around">
-        <UserAction
-          icon="thumbsUp"
-          type="upvote"
-          post={requiredPost}
-          commentId={comment._id}
-        />
-        <UserAction
-          icon="thumbsDown"
-          type="downvote"
-          post={requiredPost}
-          commentId={comment._id}
-        />
+        {isAlreadyUpvotedDownvoted(comment._id, currentUser._id, "upvote") ? (
+          <UserAction
+            icon="thumbsUpFill"
+            type="upvote"
+            post={requiredPost}
+            commentId={comment._id}
+          />
+        ) : (
+          <UserAction
+            icon="thumbsUp"
+            type="upvote"
+            post={requiredPost}
+            commentId={comment._id}
+          />
+        )}
+        {isAlreadyUpvotedDownvoted(comment._id, currentUser._id, "downvote") ? (
+          <UserAction
+            icon="thumbsDownFill"
+            type="downvote"
+            post={requiredPost}
+            commentId={comment._id}
+          />
+        ) : (
+          <UserAction
+            icon="thumbsDown"
+            type="downvote"
+            post={requiredPost}
+            commentId={comment._id}
+          />
+        )}
       </div>
     </div>
   );

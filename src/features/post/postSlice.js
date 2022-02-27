@@ -86,7 +86,6 @@ export const upvoteCommentAsync = createAsyncThunk(
         commentData.postId,
         commentData.commentId
       );
-      console.log({ response });
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -102,7 +101,6 @@ export const downvoteCommentAsync = createAsyncThunk(
         commentData.postId,
         commentData.commentId
       );
-      console.log({ response });
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -245,27 +243,47 @@ export const postSlice = createSlice({
     },
     [upvoteCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
-      console.log(action.payload);
       if (action.payload && action.payload.success) {
         state.isPostLoading = false;
-        state.allPost = state.allPost.map((post) =>
-          post._id === action.payload.postId
-            ? {
-                ...post,
-                comments: post.comments.map((comment) =>
-                  comment._id === action.payload.commentId
-                    ? {
-                        ...comment,
-                        upvote: [
-                          ...comment.upvote,
-                          action.payload.upvoteUserId,
-                        ],
-                      }
-                    : { ...comment }
-                ),
-              }
-            : { ...post }
-        );
+        action.payload.type === "UPVOTE_ADDED"
+          ? (state.allPost = state.allPost.map((post) =>
+              post._id === action.payload.postId
+                ? {
+                    ...post,
+                    comments: post.comments.map((comment) =>
+                      comment._id === action.payload.commentId
+                        ? {
+                            ...comment,
+                            upvote: [
+                              ...comment.upvote,
+                              action.payload.upvoteUserId,
+                            ],
+                            downvote: comment.downvote.filter(
+                              (userId) => userId !== action.payload.upvoteUserId
+                            ),
+                          }
+                        : { ...comment }
+                    ),
+                  }
+                : { ...post }
+            ))
+          : (state.allPost = state.allPost.map((post) =>
+              post._id === action.payload.postId
+                ? {
+                    ...post,
+                    comments: post.comments.map((comment) =>
+                      comment._id === action.payload.commentId
+                        ? {
+                            ...comment,
+                            upvote: comment.upvote.filter(
+                              (userId) => userId !== action.payload.upvoteUserId
+                            ),
+                          }
+                        : { ...comment }
+                    ),
+                  }
+                : { ...post }
+            ));
       }
     },
     [upvoteCommentAsync.rejected]: (state) => {
@@ -276,27 +294,49 @@ export const postSlice = createSlice({
     },
     [downvoteCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
-      console.log(action.payload);
       if (action.payload && action.payload.success) {
         state.isPostLoading = false;
-        state.allPost = state.allPost.map((post) =>
-          post._id === action.payload.postId
-            ? {
-                ...post,
-                comments: post.comments.map((comment) =>
-                  comment._id === action.payload.commentId
-                    ? {
-                        ...comment,
-                        upvote: [
-                          ...comment.downvote,
-                          action.payload.downvoteUserId,
-                        ],
-                      }
-                    : { ...comment }
-                ),
-              }
-            : { ...post }
-        );
+        action.payload.type === "DOWNVOTE_ADDED"
+          ? (state.allPost = state.allPost.map((post) =>
+              post._id === action.payload.postId
+                ? {
+                    ...post,
+                    comments: post.comments.map((comment) =>
+                      comment._id === action.payload.commentId
+                        ? {
+                            ...comment,
+                            downvote: [
+                              ...comment.downvote,
+                              action.payload.downvoteUserId,
+                            ],
+                            upvote: comment.upvote.filter(
+                              (userId) =>
+                                userId !== action.payload.downvoteUserId
+                            ),
+                          }
+                        : { ...comment }
+                    ),
+                  }
+                : { ...post }
+            ))
+          : (state.allPost = state.allPost.map((post) =>
+              post._id === action.payload.postId
+                ? {
+                    ...post,
+                    comments: post.comments.map((comment) =>
+                      comment._id === action.payload.commentId
+                        ? {
+                            ...comment,
+                            downvote: comment.downvote.filter(
+                              (userId) =>
+                                userId !== action.payload.downvoteUserId
+                            ),
+                          }
+                        : { ...comment }
+                    ),
+                  }
+                : { ...post }
+            ));
       }
     },
     [downvoteCommentAsync.rejected]: (state) => {

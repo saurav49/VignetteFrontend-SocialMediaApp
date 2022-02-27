@@ -37,7 +37,7 @@ function App() {
 
   // initialize user
   useEffect(() => {
-    if (!currentUser.hasOwnProperty("_id")) {
+    if (currentUser && !currentUser.hasOwnProperty("_id")) {
       dispatch(addUserInfo(JSON.parse(localStorage.getItem("currentUser"))));
     }
   }, [status, currentUser, dispatch]);
