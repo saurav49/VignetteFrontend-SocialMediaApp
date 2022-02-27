@@ -15,6 +15,7 @@ import {
 const initialState = {
   status: "idle",
   allPost: [],
+  postIdToBeDeleted: "",
   isPostLoading: false,
   showDeleteModal: false,
   cursor: null,
@@ -41,6 +42,7 @@ export const deletePostAsync = createAsyncThunk(
   async (postId) => {
     try {
       const response = await deletePost(postId);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -173,6 +175,12 @@ export const postSlice = createSlice({
         ? { ...state, showDeleteModal: true }
         : { ...state, showDeleteModal: false };
     },
+    updatePostId: (state, action) => {
+      return {
+        ...state,
+        postIdToBeDeleted: action.payload,
+      };
+    },
   },
   extraReducers: {
     [createPostAsync.pending]: (state) => {
@@ -180,7 +188,6 @@ export const postSlice = createSlice({
     },
     [createPostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
-      console.log({ action });
       if (action.payload && action.payload.success) {
         state.isPostLoading = false;
         state.allPost = [action.payload.newPost, ...state.allPost];
@@ -438,6 +445,10 @@ export const postSlice = createSlice({
   },
 });
 
-export const { togglePostLoading, updateCurrentPage, toggleDeleteModal } =
-  postSlice.actions;
+export const {
+  togglePostLoading,
+  updateCurrentPage,
+  toggleDeleteModal,
+  updatePostId,
+} = postSlice.actions;
 export default postSlice.reducer;

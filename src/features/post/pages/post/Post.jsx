@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import { useDispatch, useSelector } from "react-redux";
 import { cld } from "../../../../utils";
@@ -10,6 +10,7 @@ import {
   removeRetweetPostToAsync,
   retweetPostAsync,
   toggleDeleteModal,
+  updatePostId,
 } from "../../postSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,13 +18,16 @@ import { Modal } from "../../../../components/index";
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
-  const { showDeleteModal } = useSelector((state) => state.post);
-  const handleDeletePost = () => {
+  const { showDeleteModal, postIdToBeDeleted } = useSelector(
+    (state) => state.post
+  );
+  const handleDeletePost = (postId) => {
     dispatch(toggleDeleteModal("TRUE"));
+    dispatch(updatePostId(postId));
   };
+  console.log({ post });
   return (
     <>
-      {showDeleteModal && <Modal postId={post._id} />}
       <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center">
@@ -51,7 +55,7 @@ const Post = ({ post }) => {
           <div className="self-end mb-3">
             <button
               className="mb-6 mr-1 transition-all duration-500 text-white opacity-50 hover:opacity-100 focus:translate-y-1"
-              onClick={handleDeletePost}
+              onClick={() => handleDeletePost(post._id)}
             >
               {icons["delete_icon"]}
             </button>
@@ -131,6 +135,7 @@ const Post = ({ post }) => {
           })}
         </>
       )}
+      {showDeleteModal && <Modal postId={postIdToBeDeleted} />}
     </>
   );
 };
