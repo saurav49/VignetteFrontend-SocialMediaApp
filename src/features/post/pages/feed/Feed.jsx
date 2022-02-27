@@ -10,11 +10,21 @@ const Feed = () => {
   const { cursor, hasMore, allPost, isPostLoading } = useSelector(
     (state) => state.post
   );
-  const current = useRef();
-  const lastPostElement = useCallback((node) => {
-    console.log("here");
-    console.log(node);
-  });
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isPostLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          console.log("here");
+          dispatch(fetchAllPostAsync({ cursor, hasMore }));
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isPostLoading, hasMore, cursor]
+  );
   const dispatch = useDispatch();
   let { currentUser } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
@@ -48,8 +58,8 @@ const Feed = () => {
           allPost &&
           allPost.length > 0 &&
           allPost.map((post, index) =>
-            post.length === index + 1 ? (
-              <Post ref={lastPostElement} post={post} key={post._id} />
+            allPost.length === index + 1 ? (
+              <Post ref={lastPostElementRef} post={post} key={post._id} />
             ) : (
               <Post post={post} key={post._id} />
             )

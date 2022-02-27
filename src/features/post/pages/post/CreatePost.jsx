@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Image } from "cloudinary-react";
 import { CLOUD_NAME } from "../../../../utils";
-import { createPostAsync, addCommentAsync } from "../../postSlice";
+import {
+  createPostAsync,
+  addCommentAsync,
+  toggleBtnLoading,
+} from "../../postSlice";
+import Loader from "react-loader-spinner";
 
 const CreatePost = ({ type, id, placeholder }) => {
   const [postContent, setPostContent] = useState("");
   const dispatch = useDispatch();
   let { currentUser } = useSelector((state) => state.auth);
+  const { createPostBtnLoading } = useSelector((state) => state.post);
   !currentUser.hasOwnProperty("_id") &&
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));
 
@@ -20,6 +26,7 @@ const CreatePost = ({ type, id, placeholder }) => {
       setPostContent("");
       return;
     }
+    dispatch(toggleBtnLoading("TRUE"));
     postContent.length > 0 && dispatch(createPostAsync(postContent));
     setPostContent("");
   };
@@ -59,13 +66,19 @@ const CreatePost = ({ type, id, placeholder }) => {
         ></textarea>
       </div>
       <div className="w-full flex justify-end items-center">
-        <button
-          className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-6 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-2 rounded"
-          disabled={!postContent}
-          onClick={handleCreateNewPost}
-        >
-          Post
-        </button>
+        {createPostBtnLoading ? (
+          <button className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-6 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-2 rounded">
+            <Loader type="ThreeDots" color="#fff" height={30} width={30} />
+          </button>
+        ) : (
+          <button
+            className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-6 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-2 rounded"
+            disabled={!postContent}
+            onClick={handleCreateNewPost}
+          >
+            Post
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import { useDispatch, useSelector } from "react-redux";
 import { cld } from "../../../../utils";
@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Modal } from "../../../../components/index";
 
-const Post = ({ post }) => {
+const Post = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const { showDeleteModal, postIdToBeDeleted } = useSelector(
     (state) => state.post
@@ -25,64 +25,67 @@ const Post = ({ post }) => {
     dispatch(toggleDeleteModal("TRUE"));
     dispatch(updatePostId(postId));
   };
-  console.log({ post });
+
   return (
     <>
-      <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
+      <div
+        className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2"
+        ref={ref}
+      >
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center">
             <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
-              {post.userId.photo && post.userId.photo.id ? (
+              {props.post.userId.photo && props.post.userId.photo.id ? (
                 <AdvancedImage
-                  cldImg={cld.image(`${post.userId.photo.id}`)}
+                  cldImg={cld.image(`${props.post.userId.photo.id}`)}
                   className="align-middle w-full h-full rounded-2xl"
                 />
               ) : (
                 <span className="font-bold text-2xl text-white uppercase">
-                  {post.userId.name[0]}
+                  {props.post.userId.name[0]}
                 </span>
               )}
             </div>
             <div className="flex items-center flex-col ml-3">
               <p className="text-white text-opacity-90 text-xl font-bold mb-1">
-                {post.userId.name}
+                {props.post.userId.name}
               </p>
               <p className="text-white text-opacity-90 font-medium text-sm">
-                @{post.userId.username}
+                @{props.post.userId.username}
               </p>
             </div>
           </div>
           <div className="self-end mb-3">
             <button
               className="mb-6 mr-1 transition-all duration-500 text-white opacity-50 hover:opacity-100 focus:translate-y-1"
-              onClick={() => handleDeletePost(post._id)}
+              onClick={() => handleDeletePost(props.post._id)}
             >
               {icons["delete_icon"]}
             </button>
           </div>
         </div>
         <div className="w-full flex items-center justify-start my-2 mt-4">
-          <p className="text-white">{post.text}</p>
+          <p className="text-white">{props.post.text}</p>
         </div>
         <div className="flex items-center justify-around">
-          <UserAction icon="comment" type="comment" post={post} />
+          <UserAction icon="comment" type="comment" post={props.post} />
           <UserAction
             icon="like"
             type="likes"
-            post={post}
-            currentUser={post.userId}
+            post={props.post}
+            currentUser={props.post.userId}
           />
           <UserAction
             icon="retweet"
             type="retweet"
-            post={post}
-            currentUser={post.userId}
+            post={props.post}
+            currentUser={props.post.userId}
           />
         </div>
       </div>
-      {post.retweet.length > 0 && (
+      {props.post.retweet.length > 0 && (
         <>
-          {post.retweet.map((userInfo) => {
+          {props.post.retweet.map((userInfo) => {
             return (
               <div
                 className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2"
@@ -107,28 +110,28 @@ const Post = ({ post }) => {
                 </div>
                 <div className="w-full flex items-center">
                   <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
-                    {post.userId.photo && post.userId.photo.id ? (
+                    {props.post.userId.photo && props.post.userId.photo.id ? (
                       <AdvancedImage
-                        cldImg={cld.image(`${post.userId.photo.id}`)}
+                        cldImg={cld.image(`${props.post.userId.photo.id}`)}
                         className="align-middle w-full h-full rounded-2xl"
                       />
                     ) : (
                       <span className="font-bold text-2xl text-white uppercase">
-                        {post.userId.name[0]}
+                        {props.post.userId.name[0]}
                       </span>
                     )}
                   </div>
                   <div className="flex items-center flex-col ml-3">
                     <p className="text-white text-opacity-90 text-xl font-bold mb-1">
-                      {post.userId.name}
+                      {props.post.userId.name}
                     </p>
                     <p className="text-white text-opacity-90 font-medium text-sm">
-                      @{post.userId.username}
+                      @{props.post.userId.username}
                     </p>
                   </div>
                 </div>
                 <div className="w-full flex items-center justify-start my-2 mt-4">
-                  <p className="text-white">{post.text}</p>
+                  <p className="text-white">{props.post.text}</p>
                 </div>
               </div>
             );
@@ -138,7 +141,7 @@ const Post = ({ post }) => {
       {showDeleteModal && <Modal postId={postIdToBeDeleted} />}
     </>
   );
-};
+});
 
 const UserAction = (props) => {
   const dispatch = useDispatch();

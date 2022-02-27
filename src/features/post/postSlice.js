@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import {
   createPost,
   getAllPost,
@@ -17,6 +17,7 @@ const initialState = {
   allPost: [],
   postIdToBeDeleted: "",
   isPostLoading: false,
+  createPostBtnLoading: false,
   showDeleteModal: false,
   cursor: null,
   hasMore: true,
@@ -42,7 +43,6 @@ export const deletePostAsync = createAsyncThunk(
   async (postId) => {
     try {
       const response = await deletePost(postId);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -162,6 +162,11 @@ export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
+    toggleBtnLoading: (state, action) => {
+      return action.payload === "TRUE"
+        ? { ...state, createPostBtnLoading: true }
+        : { ...state, createPostBtnLoading: false };
+    },
     togglePostLoading: (state, action) => {
       return action.payload === "TRUE"
         ? { ...state, isPostLoading: true }
@@ -189,7 +194,7 @@ export const postSlice = createSlice({
     [createPostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
+        state.createPostBtnLoading = false;
         state.allPost = [action.payload.newPost, ...state.allPost];
       }
     },
@@ -213,7 +218,8 @@ export const postSlice = createSlice({
         return unique;
       };
       if (action.payload && action.payload.success) {
-        state.cursor = action.payload.paging.cursor;
+        console.log(action.payload);
+        state.cursor = action.payload.paging.nextCursor;
         state.hasMore = action.payload.paging.hasMore;
         state.allPost = getUniqueArray([
           ...state.allPost,
@@ -221,6 +227,7 @@ export const postSlice = createSlice({
         ]);
       }
       state.isPostLoading = false;
+      console.log(current(state));
     },
     [fetchAllPostAsync.rejected]: (state) => {
       state.status = "error";
@@ -450,5 +457,6 @@ export const {
   updateCurrentPage,
   toggleDeleteModal,
   updatePostId,
+  toggleBtnLoading,
 } = postSlice.actions;
 export default postSlice.reducer;
