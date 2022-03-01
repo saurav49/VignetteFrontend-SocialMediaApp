@@ -33,7 +33,10 @@ function User() {
         break;
     }
   };
-  console.log({ currentUser });
+  const handleEditBtn = (currentUser) => {
+    navigate("/profile/edit", { state: currentUser });
+  };
+
   return (
     <div className="bg-codGray h-full w-screen flex items-center ">
       <Sidebar
@@ -51,27 +54,45 @@ function User() {
         </button>
         <div className="border-2 border-darkCharcoal rounded-lg w-[96%] p-6 bg-darkGrey my-2 mt-3">
           <div className="w-full flex flex-col items-start">
-            <div className="flex items-center justify-start mb-5">
-              <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
-                {currentUser.photo && currentUser.photo.id ? (
-                  <AdvancedImage
-                    cldImg={cld.image(`${currentUser.photo.id}`)}
-                    className="align-middle w-full h-full rounded-2xl"
-                  />
-                ) : (
-                  <span className="font-bold text-2xl text-white uppercase">
-                    {currentUser.name[0]}
-                  </span>
-                )}
+            <div className="flex justify-between w-full">
+              <div className="flex items-center justify-start mb-5">
+                <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
+                  {currentUser.photo && currentUser.photo.id ? (
+                    <AdvancedImage
+                      cldImg={cld.image(`${currentUser.photo.id}`)}
+                      className="align-middle w-full h-full rounded-2xl"
+                    />
+                  ) : (
+                    <span className="font-bold text-2xl text-white uppercase">
+                      {currentUser.name[0]}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center flex-col ml-3">
+                  <p className="text-white text-opacity-90 text-xl font-bold mb-1">
+                    {currentUser.name}
+                  </p>
+                  <p className="text-white text-opacity-90 font-medium text-sm">
+                    @{currentUser.username}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center flex-col ml-3">
-                <p className="text-white text-opacity-90 text-xl font-bold mb-1">
-                  {currentUser.name}
-                </p>
-                <p className="text-white text-opacity-90 font-medium text-sm">
-                  @{currentUser.username}
-                </p>
+              <div className="mt-1">
+                <button
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-1 px-6 border-b-4 border-blue-700 hover:border-blue-500 focus:border-b-0 rounded self-end mb-3 mr-4"
+                  onClick={() => handleEditBtn(currentUser)}
+                >
+                  Edit
+                </button>
               </div>
+            </div>
+            <div className="my-2 mb-3 p-2 bg-darkCharcoal rounded-md w-full">
+              <p className="text-white p-2">
+                Bio : {currentUser && currentUser?.bio}
+              </p>
+              <p className="text-white p-2">
+                Website : {currentUser && currentUser?.website}
+              </p>
             </div>
             <div>
               <a

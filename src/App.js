@@ -9,6 +9,7 @@ import {
   Following,
   Follower,
   Search,
+  EditUser,
 } from "./components/index";
 import { Feed, Comment } from "./features/post/index";
 import { Notification } from "./features/notification/index";
@@ -79,6 +80,9 @@ function App() {
         </Route>
         <Route path="/search" element={<PrivateRoute />}>
           <Route path="/search" element={<Search />} />
+        </Route>
+        <Route path="/profile/edit" element={<PrivateRoute />}>
+          <Route path="/profile/edit" element={<EditUser />} />
         </Route>
       </Routes>
     </div>

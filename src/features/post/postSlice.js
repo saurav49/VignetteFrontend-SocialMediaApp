@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createPost,
   getAllPost,
@@ -218,7 +218,6 @@ export const postSlice = createSlice({
         return unique;
       };
       if (action.payload && action.payload.success) {
-        console.log(action.payload);
         state.cursor = action.payload.paging.nextCursor;
         state.hasMore = action.payload.paging.hasMore;
         state.allPost = getUniqueArray([
@@ -227,7 +226,6 @@ export const postSlice = createSlice({
         ]);
       }
       state.isPostLoading = false;
-      console.log(current(state));
     },
     [fetchAllPostAsync.rejected]: (state) => {
       state.status = "error";

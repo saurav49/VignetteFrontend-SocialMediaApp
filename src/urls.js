@@ -18,6 +18,7 @@ const GET_ALL_FOLLOWING_API = `${BASE_PATH}/user/getuser/following`;
 const UNFOLLOW_USER_API = `${BASE_PATH}/user/unfollowuser`;
 const GET_ALL_USER_API = `${BASE_PATH}/user/getalluser`;
 const FOLLOW_USER_API = `${BASE_PATH}/user/followuser`;
+const EDIT_USER_API = `${BASE_PATH}/user/edituserprofile`;
 
 export {
   BASE_PATH,
@@ -40,4 +41,5 @@ export {
   UNFOLLOW_USER_API,
   FOLLOW_USER_API,
   GET_ALL_USER_API,
+  EDIT_USER_API,
 };

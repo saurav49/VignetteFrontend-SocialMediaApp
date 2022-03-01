@@ -67,12 +67,12 @@ const CreatePost = ({ type, id, placeholder }) => {
       </div>
       <div className="w-full flex justify-end items-center">
         {createPostBtnLoading ? (
-          <button className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-6 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-2 rounded">
+          <button className="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded">
             <Loader type="ThreeDots" color="#fff" height={30} width={30} />
           </button>
         ) : (
           <button
-            className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-6 border-b-4 border-slate-700 hover:border-slate-500 focus:border-b-2 rounded"
+            className="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded"
             disabled={!postContent}
             onClick={handleCreateNewPost}
           >

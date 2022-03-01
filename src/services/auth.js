@@ -8,6 +8,7 @@ import {
   UNFOLLOW_USER_API,
   GET_ALL_USER_API,
   FOLLOW_USER_API,
+  EDIT_USER_API,
 } from "../urls";
 import { toast } from "react-toastify";
 
@@ -17,7 +18,6 @@ const HandleLoginUser = async (email, password) => {
     return response;
   } catch (error) {
     toast.error(error.response.data.errorMessage);
-    console.log("handleLoginUser", error.response.data.errorMessage);
   }
 };
 
@@ -155,6 +155,34 @@ const followUser = async (username) => {
   }
 };
 
+const editUser = async (userInfo) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.post(`${EDIT_USER_API}`, {
+        item: userInfo,
+      });
+      return response;
+    } else {
+      const response = await axios.post(
+        `${EDIT_USER_API}`,
+        {
+          item: userInfo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMessage);
+  }
+};
+
 export {
   HandleLoginUser,
   HandleSignUpUser,
@@ -164,4 +192,5 @@ export {
   unfollowUser,
   getAllUser,
   followUser,
+  editUser,
 };

@@ -10,6 +10,7 @@ const Feed = () => {
   const { cursor, hasMore, allPost, isPostLoading } = useSelector(
     (state) => state.post
   );
+  const dispatch = useDispatch();
   const observer = useRef();
   const lastPostElementRef = useCallback(
     (node) => {
@@ -25,7 +26,6 @@ const Feed = () => {
     },
     [isPostLoading, hasMore, cursor]
   );
-  const dispatch = useDispatch();
   let { currentUser } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));

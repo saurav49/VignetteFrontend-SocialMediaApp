@@ -8,6 +8,7 @@ import {
   unfollowUser,
   followUser,
   getAllUser,
+  editUser,
 } from "../../services/auth";
 
 export const getUser = createAsyncThunk("auth/getUser", async (token) => {
@@ -102,6 +103,18 @@ export const getAllUserAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getAllUser();
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const editUserAsync = createAsyncThunk(
+  "auth/editUserAsync",
+  async (userInfo) => {
+    try {
+      const response = await editUser(userInfo);
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -267,6 +280,26 @@ export const authSlice = createSlice({
       }
     },
     [getAllUserAsync.rejected]: (state) => {
+      state.status = "error";
+    },
+    [editUserAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [editUserAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.showLoader = false;
+        action.payload.updatedDoc?.name &&
+          (state.currentUser.name = action.payload.updatedDoc.name);
+        action.payload.updatedDoc?.bio &&
+          (state.currentUser.bio = action.payload.updatedDoc.bio);
+        action.payload.updatedDoc?.website &&
+          (state.currentUser.website = action.payload.updatedDoc.website);
+        localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
+        console.log({ currentUser: state.currentUser });
+      }
+    },
+    [editUserAsync.rejected]: (state) => {
       state.status = "error";
     },
   },
