@@ -24,6 +24,7 @@ const Feed = () => {
       });
       if (node) observer.current.observe(node);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isPostLoading, hasMore, cursor]
   );
   let { currentUser } = useSelector((state) => state.auth);

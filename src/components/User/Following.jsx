@@ -21,12 +21,9 @@ function Following() {
   };
 
   useEffect(() => {
-    console.log("here");
     dispatch(toggleShowLoader("TRUE"));
     dispatch(getAllFollowingUserInfoAsync());
   }, [dispatch]);
-
-  console.log({ currentUser });
 
   return (
     <div className="bg-codGray h-full w-screen flex items-center">

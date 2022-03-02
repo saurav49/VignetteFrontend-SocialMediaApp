@@ -24,16 +24,18 @@ const Sidebar = ({ name, username, photo }) => {
       </nav>
       <div className="md:flex md:items-center md:justify-between text-white hidden sm:block">
         <div className="flex items-center space-x-3">
-          {photo && photo.id ? (
-            <AdvancedImage
-              cldImg={cld.image(`${photo.id}`)}
-              className="rounded-2xl w-14 h-14 "
-            />
-          ) : (
-            <span className="font-bold text-2xl text-white uppercase">
-              {name[0]}
-            </span>
-          )}
+          <div className="h-14 w-14 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
+            {photo && photo.id ? (
+              <AdvancedImage
+                cldImg={cld.image(`${photo.id}`)}
+                className="rounded-2xl w-14 h-14"
+              />
+            ) : (
+              <span className="font-bold text-2xl text-white uppercase">
+                {name[0]}
+              </span>
+            )}
+          </div>
           <div className="hidden md:block">
             <div className="flex flex-col items-center">
               <span className="font-medium text-xl">{name}</span>
@@ -42,7 +44,7 @@ const Sidebar = ({ name, username, photo }) => {
           </div>
         </div>
         <button
-          className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in hidden sm:"
+          className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in hidden md:block"
           onClick={() => navigate("/profile")}
         >
           {icons["gear"]}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Image } from "cloudinary-react";
-import { CLOUD_NAME } from "../../../../utils";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "../../../../utils";
 import {
   createPostAsync,
   addCommentAsync,
@@ -35,11 +35,8 @@ const CreatePost = ({ type, id, placeholder }) => {
       <div className="w-full flex items-center">
         <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
           {currentUser.photo && currentUser.photo.id ? (
-            <Image
-              cloudName={`${CLOUD_NAME}`}
-              publicId={currentUser.photo.id}
-              width="300"
-              crop="scale"
+            <AdvancedImage
+              cldImg={cld.image(`${currentUser.photo.id}`)}
               className="align-middle w-full h-full rounded-2xl"
             />
           ) : (
@@ -72,7 +69,7 @@ const CreatePost = ({ type, id, placeholder }) => {
           </button>
         ) : (
           <button
-            className="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded"
+            className="bg-sky-500 cursor-pointer hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded"
             disabled={!postContent}
             onClick={handleCreateNewPost}
           >
