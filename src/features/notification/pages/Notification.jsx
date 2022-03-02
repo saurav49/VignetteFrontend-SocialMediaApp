@@ -23,13 +23,13 @@ function Notification() {
   }, [dispatch]);
 
   return (
-    <div className="bg-codGray h-full w-screen flex items-center">
+    <div className="bg-codGray h-screen w-screen flex items-center">
       <Sidebar
         name={currentUser.name}
         username={currentUser.username}
         photo={currentUser.photo}
       />
-      <div className="w-full h-screen flex flex-col items-center ml-64 pl-1 pr-2">
+      <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         {isNotificationLoading ? (
           <div className="h-screen flex">

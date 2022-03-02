@@ -44,7 +44,7 @@ function User() {
         username={currentUser.username}
         photo={currentUser.photo}
       />
-      <div className="w-full h-screen flex flex-col ml-72 pl-1 pr-2">
+      <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         <button
           className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-6 border-b-4 border-red-700 hover:border-red-500 focus:border-b-0 rounded self-end mb-3 mr-4"

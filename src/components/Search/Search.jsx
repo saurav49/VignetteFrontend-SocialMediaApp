@@ -68,7 +68,7 @@ function Search() {
         username={currentUser.username}
         photo={currentUser.photo}
       />
-      <div className="w-full flex flex-col items-center ml-64 pl-1 pr-2">
+      <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         <div className="w-[80%]">
           <label className="relative block">

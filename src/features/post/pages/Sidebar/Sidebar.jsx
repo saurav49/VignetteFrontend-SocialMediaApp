@@ -8,19 +8,21 @@ import { toast } from "react-toastify";
 const Sidebar = ({ name, username, photo }) => {
   const navigate = useNavigate();
   return (
-    <aside className="h-[97%] w-[15rem] p-3 bg-darkGrey rounded-lg  flex flex-col shadow-md fixed top-3 bottom-1 left-3 justify-between">
+    <aside className="w-[97%] fixed bottom-3 ml-2 z-10 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-60 border border-darkGrey sm:opacity-100 sm:h-[97%] md:w-[13rem] sm:w-[5rem] py-3 px-4 bg-darkGrey rounded-lg shadow-md sm:flex sm:flex-col sm:justify-between sm:fixed sm:top-2 sm:bottom-1 sm:left-2">
       <nav>
-        <div className="flex items-center justify-center">
-          <BrandIcon fill="#fff" width="44px" height="44px" />
+        <div className="hidden sm:block">
+          <div className="flex items-center justify-center">
+            <BrandIcon fill="#fff" width="44px" height="44px" />
+          </div>
         </div>
-        <ul>
+        <ul className="flex items-center justify-between sm:flex-col">
           <Row icons="home">Home</Row>
           <Row icons="search">Search</Row>
           <Row icons="notifications">Notifications</Row>
           <Row icons="profile">Profile</Row>
         </ul>
       </nav>
-      <div className="flex items-center justify-between text-white">
+      <div className="md:flex md:items-center md:justify-between text-white hidden sm:block">
         <div className="flex items-center space-x-3">
           {photo && photo.id ? (
             <AdvancedImage
@@ -32,13 +34,15 @@ const Sidebar = ({ name, username, photo }) => {
               {name[0]}
             </span>
           )}
-          <div className="flex flex-col items-center">
-            <span className="font-medium text-xl">{name}</span>
-            <span className="text-sm">@{username}</span>
+          <div className="hidden md:block">
+            <div className="flex flex-col items-center">
+              <span className="font-medium text-xl">{name}</span>
+              <span className="text-sm">@{username}</span>
+            </div>
           </div>
         </div>
         <button
-          className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in"
+          className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in hidden sm:"
           onClick={() => navigate("/profile")}
         >
           {icons["gear"]}
@@ -73,11 +77,11 @@ const Row = (props) => {
   };
   return (
     <li
-      className="flex items-center w-full py-2 px-1 rounded-xl my-5 cursor-pointer text-white text-opacity-90 hover:bg-codGray transition-colors duration-150 ease-in active:bg-codGray focus:outline-none focus:ring focus:ring-codGray"
+      className="flex items-center justify-center md:justify-start w-full py-2 px-1 rounded-xl my-5 cursor-pointer text-white text-opacity-90 hover:bg-codGray transition-colors duration-150 ease-in active:bg-codGray focus:outline-none focus:ring focus:ring-codGray"
       onClick={() => handleSidebarItem(props.icons)}
     >
       {icons[props.icons]}
-      <span className="ml-3 ">{props.children}</span>
+      <span className="ml-3 hidden md:block">{props.children}</span>
     </li>
   );
 };

@@ -29,7 +29,7 @@ function EditUser() {
         username={currentUser.username}
         photo={currentUser.photo}
       />
-      <div className="w-full h-screen flex flex-col ml-72 pl-1 pr-2">
+      <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         <div className="border-2 border-darkCharcoal rounded-lg w-[96%] p-6 bg-darkGrey my-2 mt-3">
           <div className="flex flex-col gap-4">
