@@ -4,6 +4,7 @@ import {
   POST_API,
   GET_ALL_POST,
   ADD_COMMENT_API,
+  REMOVE_COMMENT_API,
   UPVOTE_COMMENT_API,
   DOWNVOTE_COMMENT_API,
   LIKE_POST_API,
@@ -255,6 +256,32 @@ const deletePost = async (postId) => {
   }
 };
 
+const removeCommentDb = async (commentId, postId) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.post(`${REMOVE_COMMENT_API}/${postId}`, {
+        commentId,
+      });
+      return response;
+    } else {
+      const response = await axios.post(
+        `${REMOVE_COMMENT_API}/${postId}`,
+        { commentId },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMesssage);
+  }
+};
+
 export {
   createPost,
   getAllPost,
@@ -266,4 +293,5 @@ export {
   unlikePostToDb,
   removeRetweetPostToDb,
   deletePost,
+  removeCommentDb,
 };

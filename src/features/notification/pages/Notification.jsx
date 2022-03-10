@@ -29,14 +29,17 @@ function Notification() {
         username={currentUser.username}
         photo={currentUser.photo}
       />
-      <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
+      <div className="w-full h-screen flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         {isNotificationLoading ? (
           <div className="h-screen flex">
             <Loader type="ThreeDots" color="#fff" height={100} width={100} />
           </div>
+        ) : allNotifications && allNotifications.length === 0 ? (
+          <h1 className="text-xl text-white">
+            You do not have any notifications now
+          </h1>
         ) : (
-          allNotifications &&
           allNotifications.map((notification) => {
             return (
               <div

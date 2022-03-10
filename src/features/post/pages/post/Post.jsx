@@ -21,10 +21,17 @@ const Post = React.forwardRef((props, ref) => {
   const { showDeleteModal, postIdToBeDeleted } = useSelector(
     (state) => state.post
   );
+
+  let { currentUser } = useSelector((state) => state.auth);
+  !currentUser.hasOwnProperty("_id") &&
+    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+
   const handleDeletePost = (postId) => {
     dispatch(toggleDeleteModal("TRUE"));
     dispatch(updatePostId(postId));
   };
+  const current = new Date();
+  const postTime = new Date(props.post.createdAt);
 
   return (
     <>
@@ -54,6 +61,9 @@ const Post = React.forwardRef((props, ref) => {
                 @{props.post.userId.username}
               </p>
             </div>
+            <div className="mb-6">
+              <DateCard current={current} postTime={postTime} />
+            </div>
           </div>
           <div className="self-end mb-3">
             <button
@@ -73,13 +83,13 @@ const Post = React.forwardRef((props, ref) => {
             icon="like"
             type="likes"
             post={props.post}
-            currentUser={props.post.userId}
+            currentUser={currentUser}
           />
           <UserAction
             icon="retweet"
             type="retweet"
             post={props.post}
-            currentUser={props.post.userId}
+            currentUser={currentUser}
           />
         </div>
       </div>
@@ -138,10 +148,62 @@ const Post = React.forwardRef((props, ref) => {
           })}
         </>
       )}
-      {showDeleteModal && <Modal postId={postIdToBeDeleted} />}
+      {showDeleteModal && <Modal id={postIdToBeDeleted} type="POST" />}
     </>
   );
 });
+
+const DateCard = ({ current, postTime }) => {
+  let displayTime;
+  const secondsBy = Math.abs(
+    Math.ceil(current.getTime() / 1000 - postTime.getTime() / 1000)
+  );
+  const calender = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+  const minutesBy = Math.abs(
+    Math.ceil(
+      Math.ceil(current.getTime() / 1000 - postTime.getTime() / 1000) / 60
+    )
+  );
+  const hoursBy = Math.abs(
+    Math.ceil(
+      Math.ceil(
+        Math.ceil(current.getTime() / 1000 - postTime.getTime() / 1000) / 60
+      ) / 60
+    )
+  );
+  const dateBy = `${postTime.getDate()} ${
+    calender[postTime.getMonth()]
+  } ${postTime.getFullYear()}`;
+  if (secondsBy < 60) {
+    displayTime = `${secondsBy}s`;
+  } else if (secondsBy > 60 && minutesBy < 60) {
+    displayTime = `${minutesBy}min`;
+  } else if (minutesBy > 60 && hoursBy < 24) {
+    displayTime = `${hoursBy}h`;
+  } else if (hoursBy > 24) {
+    displayTime = dateBy;
+  }
+  return (
+    <>
+      <p className="text-slate-300 opacity-40 ml-2 text-xs font-semibold">
+        {displayTime}
+      </p>
+    </>
+  );
+};
 
 const UserAction = (props) => {
   const dispatch = useDispatch();
@@ -151,7 +213,9 @@ const UserAction = (props) => {
       userActionType =
         post &&
         post[userActionType] &&
-        post[userActionType].find((e) => e === currentUser._id) !== undefined
+        post[userActionType].find(
+          (e) => e === currentUser._id || e._id === currentUser._id
+        ) !== undefined
           ? "unlike"
           : "likes";
     }
@@ -216,9 +280,6 @@ const UserAction = (props) => {
         type={props.type}
         commentId={props.commentId}
       />
-      <span className="ml-2">
-        {props.post[props.type] && props.post[props.type].length}
-      </span>
     </div>
   );
 };
@@ -230,8 +291,9 @@ const UserActionIcon = (props) => {
       props.post &&
       props.post[props.type] &&
       props.currentUser &&
-      props.post[props.type].find((e) => e === props.currentUser._id) !==
-        undefined;
+      props.post[props.type].find(
+        (e) => e === props.currentUser._id || e._id === props.currentUser._id
+      ) !== undefined;
   }
   return (
     <>
@@ -242,11 +304,14 @@ const UserActionIcon = (props) => {
             <span className="ml-2">{props.post[props.type].length}</span>
           </div>
         ) : (
-          icons[props.icon]
+          <>
+            {icons[props.icon]}
+            <span className="ml-2">{props.post[props.type].length}</span>
+          </>
         )
       ) : (
         <>
-          {(props.type === "upvote") | (props.type === "downvote") ? (
+          {props.type === "upvote" || props.type === "downvote" ? (
             <div className="text-sky-400 opacity:50 hover:opacity-100 flex items-center">
               {icons[props.icon]}
               <span className="ml-2">

@@ -3,6 +3,7 @@ import {
   createPost,
   getAllPost,
   addCommentToDb,
+  removeCommentDb,
   addDownvoteCommentDb,
   addUpvoteToCommentDb,
   likePostToDb,
@@ -16,6 +17,7 @@ const initialState = {
   status: "idle",
   allPost: [],
   postIdToBeDeleted: "",
+  commentDeleteData: { postId: "", commentId: "" },
   isPostLoading: false,
   createPostBtnLoading: false,
   showDeleteModal: false,
@@ -67,12 +69,24 @@ export const fetchAllPostAsync = createAsyncThunk(
 export const addCommentAsync = createAsyncThunk(
   "post/addCommentAsync",
   async (commentData) => {
-    console.log({ commentData });
     try {
       const response = await addCommentToDb(
         commentData.postContent,
         commentData.id
       );
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const removeCommentAsync = createAsyncThunk(
+  "post/removeCommentAsync",
+  async (data) => {
+    console.log({ data });
+    try {
+      const response = await removeCommentDb(data.commentId, data.postId);
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -184,6 +198,12 @@ export const postSlice = createSlice({
       return {
         ...state,
         postIdToBeDeleted: action.payload,
+      };
+    },
+    updatecommentId: (state, action) => {
+      return {
+        ...state,
+        commentDeleteData: action.payload,
       };
     },
   },
@@ -432,6 +452,28 @@ export const postSlice = createSlice({
     [removeRetweetPostToAsync.rejected]: (state) => {
       state.status = "error";
     },
+    [removeCommentAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [removeCommentAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      if (action.payload && action.payload.success) {
+        state.isPostLoading = false;
+        state.allPost = state.allPost.map((post) =>
+          post._id === action.payload.postId
+            ? {
+                ...post,
+                comments: post.comments.filter(
+                  (comment) => comment._id !== action.payload.commentId
+                ),
+              }
+            : { ...post }
+        );
+      }
+    },
+    [removeCommentAsync.rejected]: (state) => {
+      state.status = "error";
+    },
     [deletePostAsync.pending]: (state) => {
       state.status = "loading";
     },
@@ -455,6 +497,7 @@ export const {
   updateCurrentPage,
   toggleDeleteModal,
   updatePostId,
+  updatecommentId,
   toggleBtnLoading,
 } = postSlice.actions;
 export default postSlice.reducer;

@@ -9,7 +9,6 @@ export const getAllNotificationAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getAllNotificationOfCurrentUser();
-      console.log({ response });
       return response.data;
     } catch (error) {
       console.log({ error });

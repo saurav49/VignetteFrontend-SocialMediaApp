@@ -3,14 +3,19 @@ import {
   toggleDeleteModal,
   deletePostAsync,
   togglePostLoading,
+  removeCommentAsync,
 } from "../../features/post/postSlice";
 
-const Modal = ({ postId }) => {
+const Modal = ({ id, postId, type }) => {
   const dispatch = useDispatch();
   const handleDeletePost = () => {
-    if (postId) {
+    if (id && type === "POST") {
       dispatch(togglePostLoading("TRUE"));
-      dispatch(deletePostAsync(postId));
+      dispatch(deletePostAsync(id));
+      dispatch(toggleDeleteModal("FALSE"));
+    } else if (id && type === "COMMENT") {
+      dispatch(togglePostLoading("TRUE"));
+      dispatch(removeCommentAsync({ commentId: id, postId }));
       dispatch(toggleDeleteModal("FALSE"));
     }
   };
@@ -19,10 +24,11 @@ const Modal = ({ postId }) => {
   };
 
   return (
-    <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-codGray opacity-80">
+    <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-codGray">
       <div className="flex items-center flex-col w-[400px] bg-white text-slate-900 rounded-md shadow-md py-8 px-4 absolute">
         <p className="text-center my-2">
-          Do you really want to delete this post? This process cannot be undone
+          Do you really want to delete this {type.toLowerCase()}? This process
+          cannot be undone
         </p>
         <div className="flex items-center w-100 mt-4">
           <button

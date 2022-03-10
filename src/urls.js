@@ -5,6 +5,7 @@ const GET_USER_API = `${BASE_PATH}/user/getuser`;
 const POST_API = `${BASE_PATH}/post`;
 const GET_ALL_POST = `${POST_API}/feed`;
 const ADD_COMMENT_API = `${POST_API}/addcomment`;
+const REMOVE_COMMENT_API = `${POST_API}/removecomment`;
 const UPVOTE_COMMENT_API = `${POST_API}/comment/upvote`;
 const DOWNVOTE_COMMENT_API = `${POST_API}/comment/downvote`;
 const LIKE_POST_API = `${POST_API}/like`;
@@ -42,4 +43,5 @@ export {
   FOLLOW_USER_API,
   GET_ALL_USER_API,
   EDIT_USER_API,
+  REMOVE_COMMENT_API,
 };
