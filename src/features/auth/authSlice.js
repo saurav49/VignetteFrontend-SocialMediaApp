@@ -160,7 +160,6 @@ export const authSlice = createSlice({
     [signUpUser.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         localStorage.setItem("token", JSON.stringify(action.payload.token));
         localStorage.setItem(
           "currentUser",
@@ -170,6 +169,7 @@ export const authSlice = createSlice({
         state.token = action.payload.token;
         state.currentUser = action.payload.savedUser;
       }
+      state.showLoader = false;
     },
     [signUpUser.rejected]: (state, action) => {
       state.status = "error";
@@ -181,7 +181,6 @@ export const authSlice = createSlice({
     [loginUserWithCredentials.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         localStorage.setItem("token", JSON.stringify(action.payload.token));
         localStorage.setItem(
           "currentUser",
@@ -191,6 +190,7 @@ export const authSlice = createSlice({
         state.token = action.payload.token;
         state.currentUser = action.payload.savedUser;
       }
+      state.showLoader = false;
     },
     [loginUserWithCredentials.rejected]: (state, action) => {
       state.status = "error";
@@ -202,7 +202,6 @@ export const authSlice = createSlice({
     [getUser.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         localStorage.setItem(
           "currentUser",
           JSON.stringify(action.payload.savedUser)
@@ -210,6 +209,7 @@ export const authSlice = createSlice({
         state.userId = action.payload.savedUser._id;
         state.currentUser = action.payload.savedUser;
       }
+      state.showLoader = false;
     },
     [getUser.rejected]: (state, action) => {
       state.status = "error";
@@ -221,9 +221,9 @@ export const authSlice = createSlice({
     [getAllFollowingUserInfoAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         state.currentUser.following = action.payload.reqdUser;
       }
+      state.showLoader = false;
     },
     [getAllFollowingUserInfoAsync.rejected]: (state) => {
       state.status = "error";
@@ -234,9 +234,9 @@ export const authSlice = createSlice({
     [getAllFollowerUserInfoAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         state.currentUser.followers = action.payload.reqdUser;
       }
+      state.showLoader = false;
     },
     [getAllFollowerUserInfoAsync.rejected]: (state) => {
       state.status = "error";
@@ -247,11 +247,11 @@ export const authSlice = createSlice({
     [unfollowUserAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         state.currentUser.following = state.currentUser.following.filter(
           (user) => user._id !== action.payload.reqdUser._id
         );
       }
+      state.showLoader = false;
     },
     [unfollowUserAsync.rejected]: (state) => {
       state.status = "error";
@@ -262,9 +262,9 @@ export const authSlice = createSlice({
     [followUserAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         state.currentUser.following.push(action.payload.reqdUser);
       }
+      state.showLoader = false;
     },
     [followUserAsync.rejected]: (state) => {
       state.status = "error";
@@ -275,9 +275,9 @@ export const authSlice = createSlice({
     [getAllUserAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         state.allUsers = action.payload.allUsers;
       }
+      state.showLoader = false;
     },
     [getAllUserAsync.rejected]: (state) => {
       state.status = "error";
@@ -288,16 +288,18 @@ export const authSlice = createSlice({
     [editUserAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.showLoader = false;
         action.payload.updatedDoc?.name &&
           (state.currentUser.name = action.payload.updatedDoc.name);
         action.payload.updatedDoc?.bio &&
           (state.currentUser.bio = action.payload.updatedDoc.bio);
         action.payload.updatedDoc?.website &&
           (state.currentUser.website = action.payload.updatedDoc.website);
+        action.payload.updatedDoc?.photo &&
+          (state.currentUser.photo = action.payload.updatedDoc.photo);
         localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
         console.log({ currentUser: state.currentUser });
       }
+      state.showLoader = false;
     },
     [editUserAsync.rejected]: (state) => {
       state.status = "error";

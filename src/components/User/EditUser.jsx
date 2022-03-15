@@ -14,12 +14,31 @@ function EditUser() {
   const [editUsername, setEditUsername] = useState(currentUser.name);
   const [editBio, setEditBio] = useState(currentUser.bio);
   const [editUrl, setEditUrl] = useState(currentUser.website);
+  const [ediProfileImage, setEdiProfileImage] = useState("");
+  const [previewImage, setpreviewImage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const dispatch = useDispatch();
   const handleSaveBtn = () => {
     dispatch(toggleShowLoader("TRUE"));
     dispatch(
-      editUserAsync({ name: editUsername, bio: editBio, website: editUrl })
+      editUserAsync({ name: editUsername, bio: editBio, website: editUrl, photo: previewImage })
     );
+    setEdiProfileImage("");
+  };
+
+  const handleImageInput = (e) => {
+    const file = e.target.files[0];
+    handlePreviewFile(file);
+  };
+
+  const handlePreviewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener("load", () => {
+      setpreviewImage(reader.result.replace(/(\r\n|\n|\r)/gm, ""));
+    });
+    setShowModal(true);
   };
 
   return (
@@ -32,9 +51,40 @@ function EditUser() {
       <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
         <div className="border-2 border-darkCharcoal rounded-lg w-[96%] p-6 bg-darkGrey my-2 mt-3">
+          {showModal && (
+            <ImageModal
+              setShowModal={setShowModal}
+              previewImage={previewImage}
+            />
+          )}
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
-              <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
+              <div className="relative h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
+                <div className="absolute top-1 right-1">
+                  <input
+                    type="file"
+                    id="input_profile"
+                    value={ediProfileImage}
+                    onChange={handleImageInput}
+                    hidden
+                  />
+                  <label htmlFor="input_profile">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-8 w-8 cursor-pointer"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#fff"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </label>
+                </div>
                 {currentUser.photo && currentUser.photo.id ? (
                   <AdvancedImage
                     cldImg={cld.image(`${currentUser.photo.id}`)}
@@ -115,4 +165,28 @@ function EditUser() {
   );
 }
 
-export { EditUser };
+const ImageModal = ({ previewImage, setShowModal }) => {
+  const handleCancelDelete = () => {
+    setShowModal(false);
+  };
+  return (
+    <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center ">
+      <div className="flex items-center justify-center flex-col w-[310px] py-2 bg-white text-slate-900 rounded-md shadow-md py-8 px-4 absolute">
+        <h2 className="text-xl text-slate-600">Image Preview</h2>
+        <img
+          src={previewImage}
+          alt="preview_profile"
+          className="w-[70%] rounded-lg my-2"
+        />
+        <button
+          className="mt-2 bg-slate-500 hover:bg-slate-400 text-white text-center font-bold py-2 px-5 border-b-4 mb-5 border-slate-700 hover:border-slate-500 rounded uppercase mr-5"
+          onClick={handleCancelDelete}
+        >
+          cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export { EditUser, ImageModal };
