@@ -79,7 +79,7 @@ const NotificationSnippet = (props) => {
     case "RETWEET":
       actionType = "has retweeted your tweet";
       break;
-    case "LIKE":
+    case "LIKED":
       actionType = "has liked your tweet";
       break;
     default:

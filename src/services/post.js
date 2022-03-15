@@ -13,15 +13,18 @@ import {
   REMOVE_RETWEET_POST_API,
 } from "../urls";
 
-const createPost = async (postContent) => {
+const createPost = async (postContent, previewPostImage) => {
   try {
     if (axios.defaults.headers.common["Authorization"]) {
-      const response = await axios.post(POST_API, { text: postContent });
+      const response = await axios.post(POST_API, {
+        postContent: postContent,
+        previewPostImage: previewPostImage,
+      });
       return response;
     } else {
       const response = await axios.post(
         POST_API,
-        { text: postContent },
+        { text: postContent, previewPostImage: previewPostImage },
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(

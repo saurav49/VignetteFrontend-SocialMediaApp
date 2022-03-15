@@ -22,7 +22,12 @@ function EditUser() {
   const handleSaveBtn = () => {
     dispatch(toggleShowLoader("TRUE"));
     dispatch(
-      editUserAsync({ name: editUsername, bio: editBio, website: editUrl, photo: previewImage })
+      editUserAsync({
+        name: editUsername,
+        bio: editBio,
+        website: editUrl,
+        photo: previewImage,
+      })
     );
     setEdiProfileImage("");
   };
@@ -171,13 +176,17 @@ const ImageModal = ({ previewImage, setShowModal }) => {
   };
   return (
     <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center ">
-      <div className="flex items-center justify-center flex-col w-[310px] py-2 bg-white text-slate-900 rounded-md shadow-md py-8 px-4 absolute">
+      <div className="flex items-center justify-center flex-col w-[300px] sm:w-[50%] md:w-[35%] py-2 bg-white text-slate-900 rounded-md shadow-md py-8 px-4 absolute">
         <h2 className="text-xl text-slate-600">Image Preview</h2>
-        <img
-          src={previewImage}
-          alt="preview_profile"
-          className="w-[70%] rounded-lg my-2"
-        />
+        {previewImage ? (
+          <img
+            src={previewImage}
+            alt="preview_profile"
+            className="w-[90%] rounded-lg my-2"
+          />
+        ) : (
+          <Loader type="ThreeDots" color="#333" height={50} width={50} />
+        )}
         <button
           className="mt-2 bg-slate-500 hover:bg-slate-400 text-white text-center font-bold py-2 px-5 border-b-4 mb-5 border-slate-700 hover:border-slate-500 rounded uppercase mr-5"
           onClick={handleCancelDelete}

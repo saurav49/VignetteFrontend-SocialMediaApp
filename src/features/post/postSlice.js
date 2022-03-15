@@ -30,9 +30,12 @@ const initialState = {
 
 export const createPostAsync = createAsyncThunk(
   "post/createPostAsync",
-  async (postContent) => {
+  async (postData) => {
     try {
-      const response = await createPost(postContent);
+      const response = await createPost(
+        postData.postContent,
+        postData?.previewPostImage
+      );
       return response.data;
     } catch (error) {
       console.log({ error });
@@ -84,7 +87,6 @@ export const addCommentAsync = createAsyncThunk(
 export const removeCommentAsync = createAsyncThunk(
   "post/removeCommentAsync",
   async (data) => {
-    console.log({ data });
     try {
       const response = await removeCommentDb(data.commentId, data.postId);
       return response.data;
@@ -214,9 +216,9 @@ export const postSlice = createSlice({
     [createPostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.createPostBtnLoading = false;
         state.allPost = [action.payload.newPost, ...state.allPost];
       }
+      state.createPostBtnLoading = false;
     },
     [createPostAsync.rejected]: (state) => {
       state.status = "error";
@@ -256,7 +258,6 @@ export const postSlice = createSlice({
     [addCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? {
@@ -266,6 +267,7 @@ export const postSlice = createSlice({
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [addCommentAsync.rejected]: (state) => {
       state.status = "error";
@@ -276,7 +278,6 @@ export const postSlice = createSlice({
     [upvoteCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         action.payload.type === "UPVOTE_ADDED"
           ? (state.allPost = state.allPost.map((post) =>
               post._id === action.payload.postId
@@ -317,6 +318,7 @@ export const postSlice = createSlice({
                 : { ...post }
             ));
       }
+      state.isPostLoading = false;
     },
     [upvoteCommentAsync.rejected]: (state) => {
       state.status = "error";
@@ -327,7 +329,6 @@ export const postSlice = createSlice({
     [downvoteCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         action.payload.type === "DOWNVOTE_ADDED"
           ? (state.allPost = state.allPost.map((post) =>
               post._id === action.payload.postId
@@ -370,6 +371,7 @@ export const postSlice = createSlice({
                 : { ...post }
             ));
       }
+      state.isPostLoading = false;
     },
     [downvoteCommentAsync.rejected]: (state) => {
       state.status = "error";
@@ -380,7 +382,6 @@ export const postSlice = createSlice({
     [unlikePostToAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? {
@@ -392,6 +393,7 @@ export const postSlice = createSlice({
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [unlikePostToAsync.rejected]: (state) => {
       state.status = "error";
@@ -402,13 +404,13 @@ export const postSlice = createSlice({
     [likePostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? { ...post, likes: [...post.likes, action.payload.userId] }
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [likePostAsync.rejected]: (state) => {
       state.status = "error";
@@ -419,13 +421,13 @@ export const postSlice = createSlice({
     [retweetPostAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? { ...post, retweet: [...post.retweet, action.payload.retweet] }
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [retweetPostAsync.rejected]: (state) => {
       state.status = "error";
@@ -436,7 +438,6 @@ export const postSlice = createSlice({
     [removeRetweetPostToAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? {
@@ -448,6 +449,7 @@ export const postSlice = createSlice({
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [removeRetweetPostToAsync.rejected]: (state) => {
       state.status = "error";
@@ -458,7 +460,6 @@ export const postSlice = createSlice({
     [removeCommentAsync.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        state.isPostLoading = false;
         state.allPost = state.allPost.map((post) =>
           post._id === action.payload.postId
             ? {
@@ -470,6 +471,7 @@ export const postSlice = createSlice({
             : { ...post }
         );
       }
+      state.isPostLoading = false;
     },
     [removeCommentAsync.rejected]: (state) => {
       state.status = "error";
@@ -483,8 +485,8 @@ export const postSlice = createSlice({
         state.allPost = state.allPost.filter(
           (post) => post._id !== action.payload.postId
         );
-        state.isPostLoading = false;
       }
+      state.isPostLoading = false;
     },
     [deletePostAsync.rejected]: (state) => {
       state.status = "error";

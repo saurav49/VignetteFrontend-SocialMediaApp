@@ -77,6 +77,14 @@ const Post = React.forwardRef((props, ref) => {
         <div className="w-full flex items-center justify-start my-2 mt-4">
           <p className="text-white">{props.post.text}</p>
         </div>
+        {props.post.postPhoto && props.post.postPhoto.hasOwnProperty("id") && (
+          <div className="w-full flex items-center justify-center my-2 mt-4">
+            <AdvancedImage
+              cldImg={cld.image(`${props.post.postPhoto.id}`)}
+              className="align-middle w-[320px] sm:w-[35%] bg-cover rounded-md"
+            />
+          </div>
+        )}
         <div className="flex items-center justify-around">
           <UserAction icon="comment" type="comment" post={props.post} />
           <UserAction
@@ -143,6 +151,15 @@ const Post = React.forwardRef((props, ref) => {
                 <div className="w-full flex items-center justify-start my-2 mt-4">
                   <p className="text-white">{props.post.text}</p>
                 </div>
+                {props.post.postPhoto &&
+                  props.post.postPhoto.hasOwnProperty("id") && (
+                    <div className="w-full flex items-center justify-center my-2 mt-4">
+                      <AdvancedImage
+                        cldImg={cld.image(`${props.post.postPhoto.id}`)}
+                        className="align-middle w-[320px] sm:w-[35%] bg-cover rounded-md"
+                      />
+                    </div>
+                  )}
               </div>
             );
           })}
@@ -187,20 +204,26 @@ const DateCard = ({ current, postTime }) => {
   const dateBy = `${postTime.getDate()} ${
     calender[postTime.getMonth()]
   } ${postTime.getFullYear()}`;
-  if (secondsBy < 60) {
+  if (secondsBy <= 30) {
+    displayTime = `just now`;
+  }
+  if (secondsBy <= 60) {
     displayTime = `${secondsBy}s`;
-  } else if (secondsBy > 60 && minutesBy < 60) {
+  } else if (secondsBy > 60 && minutesBy <= 60) {
     displayTime = `${minutesBy}min`;
   } else if (minutesBy > 60 && hoursBy < 24) {
     displayTime = `${hoursBy}h`;
   } else if (hoursBy > 24) {
     displayTime = dateBy;
   }
+
   return (
     <>
-      <p className="text-slate-300 opacity-40 ml-2 text-xs font-semibold">
-        {displayTime}
-      </p>
+      {displayTime && (
+        <p className="text-slate-300 opacity-40 ml-2 text-xs font-semibold">
+          {displayTime}
+        </p>
+      )}
     </>
   );
 };

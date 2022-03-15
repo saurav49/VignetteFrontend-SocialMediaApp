@@ -8,9 +8,12 @@ import {
   toggleBtnLoading,
 } from "../../postSlice";
 import Loader from "react-loader-spinner";
-
+import { ImageModal } from "../../../../components/index";
 const CreatePost = ({ type, id, placeholder }) => {
   const [postContent, setPostContent] = useState("");
+  const [editPostImage, seteditPostImage] = useState("");
+  const [previewImage, setpreviewImage] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   let { currentUser } = useSelector((state) => state.auth);
   const { createPostBtnLoading } = useSelector((state) => state.post);
@@ -27,8 +30,30 @@ const CreatePost = ({ type, id, placeholder }) => {
       return;
     }
     dispatch(toggleBtnLoading("TRUE"));
-    postContent.length > 0 && dispatch(createPostAsync(postContent));
+    postContent.length > 0 &&
+      dispatch(
+        createPostAsync({
+          postContent: postContent,
+          previewPostImage: previewImage,
+        })
+      );
     setPostContent("");
+    seteditPostImage("");
+    setpreviewImage("");
+  };
+
+  const handleImageInput = (e) => {
+    const file = e.target.files[0];
+    handlePreviewFile(file);
+  };
+
+  const handlePreviewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener("load", () => {
+      setpreviewImage(reader.result.replace(/(\r\n|\n|\r)/gm, ""));
+    });
+    setShowModal(true);
   };
   return (
     <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey mb-3 mt-2">
@@ -62,21 +87,51 @@ const CreatePost = ({ type, id, placeholder }) => {
           onChange={handlePostContent}
         ></textarea>
       </div>
-      <div className="w-full flex justify-end items-center">
+      <div className="w-full flex justify-between items-center">
+        {type !== "COMMENT" && (
+          <div>
+            <input
+              type="file"
+              id="input_post"
+              value={editPostImage}
+              onChange={handleImageInput}
+              hidden
+            />
+            <label htmlFor="input_post">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10 "
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="#fff"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </label>
+          </div>
+        )}
         {createPostBtnLoading ? (
           <button className="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded">
             <Loader type="ThreeDots" color="#fff" height={30} width={30} />
           </button>
         ) : (
           <button
-            className="bg-sky-500 cursor-pointer hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded"
+            className={`bg-sky-500 cursor-pointer hover:bg-sky-400 text-white font-bold py-2 px-6 border-b-4 border-sky-700 hover:border-sky-500 focus:border-b-2 rounded`}
             disabled={!postContent}
             onClick={handleCreateNewPost}
           >
-            Post
+            {type === "COMMENT" ? <span>Comment</span> : <span>Post</span>}
           </button>
         )}
       </div>
+      {showModal && (
+        <ImageModal previewImage={previewImage} setShowModal={setShowModal} />
+      )}
     </div>
   );
 };
