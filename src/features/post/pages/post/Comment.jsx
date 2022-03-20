@@ -35,6 +35,7 @@ const Comment = () => {
           name={currentUser.name}
           username={currentUser.username}
           photo={currentUser.photo}
+          id={currentUser._id}
         />
 
         <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">

@@ -16,6 +16,8 @@ const NOTIFICATION_API = `${BASE_PATH}/notification`;
 const REMOVE_NOTIFICATION_API = `${NOTIFICATION_API}/remove-notification`;
 const GET_ALL_FOLLOWERS_API = `${BASE_PATH}/user/getuser/followers`;
 const GET_ALL_FOLLOWING_API = `${BASE_PATH}/user/getuser/following`;
+const GET_ALL_OTHERUSER_FOLLOWERS_API = `${BASE_PATH}/user/OTHERUSER/followers`;
+const GET_ALL_OTHERUSER_FOLLOWING_API = `${BASE_PATH}/user/OTHERUSER/following`;
 const UNFOLLOW_USER_API = `${BASE_PATH}/user/unfollowuser`;
 const GET_ALL_USER_API = `${BASE_PATH}/user/getalluser`;
 const FOLLOW_USER_API = `${BASE_PATH}/user/followuser`;
@@ -44,4 +46,6 @@ export {
   GET_ALL_USER_API,
   EDIT_USER_API,
   REMOVE_COMMENT_API,
+  GET_ALL_OTHERUSER_FOLLOWERS_API,
+  GET_ALL_OTHERUSER_FOLLOWING_API,
 };

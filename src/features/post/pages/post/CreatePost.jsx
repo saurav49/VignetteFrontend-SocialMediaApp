@@ -56,7 +56,7 @@ const CreatePost = ({ type, id, placeholder }) => {
     setShowModal(true);
   };
   return (
-    <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey mb-3 mt-2">
+    <div className="border-2 border-darkCharcoal rounded-lg w-[92%] sm:w-[75%] p-3 bg-darkGrey mb-3 mt-2">
       <div className="w-full flex items-center">
         <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
           {currentUser.photo && currentUser.photo.id ? (

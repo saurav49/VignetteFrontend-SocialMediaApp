@@ -43,7 +43,7 @@ function Notification() {
           allNotifications.map((notification) => {
             return (
               <div
-                className="w-[95%] border-2 border-darkCharcoal rounded-md p-4 m-2 h-[80px] bg-darkCharcoal flex items-center relative"
+                className="w-[90%] sm:w-[60%] border-2 border-darkCharcoal rounded-md p-4 m-2 h-[80px] bg-darkCharcoal flex items-center relative"
                 key={notification._id}
               >
                 <NotificationSnippet
@@ -90,7 +90,7 @@ const NotificationSnippet = (props) => {
     dispatch(deleteNotificationAsync(id));
   };
   return (
-    <>
+    <div className="my-2">
       <span
         className="absolute top-2 right-2 opacity-50 cursor-pointer text-white hover:opacity-100"
         onClick={() => handleDeleteNotification(props.id)}
@@ -100,7 +100,7 @@ const NotificationSnippet = (props) => {
       <p className="text-white text-xl">
         {props.actionOwner && props.actionOwner.name} {actionType}
       </p>
-    </>
+    </div>
   );
 };
 

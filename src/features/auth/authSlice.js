@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import {
   HandleLoginUser,
   HandleSignUpUser,
@@ -9,6 +9,8 @@ import {
   followUser,
   getAllUser,
   editUser,
+  getAllFollowingOtherUserInfo,
+  getAllFollowerOtherUserInfo,
 } from "../../services/auth";
 
 export const getUser = createAsyncThunk("auth/getUser", async (token) => {
@@ -122,6 +124,32 @@ export const editUserAsync = createAsyncThunk(
   }
 );
 
+export const getAllFollowingOtherUserInfoAsync = createAsyncThunk(
+  "auth/getAllFollowingOtherUserInfoAsync",
+  async (userId) => {
+    console.log({ userId });
+    try {
+      const response = await getAllFollowingOtherUserInfo(userId);
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
+export const getAllFollowerOtherUserInfoAsync = createAsyncThunk(
+  "auth/getAllFollowerOtherUserInfoAsync",
+  async (userId) => {
+    console.log({ userId });
+    try {
+      const response = await getAllFollowerOtherUserInfo(userId);
+      return response.data;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -132,13 +160,14 @@ export const authSlice = createSlice({
     userId: "",
     currentUser: {},
     allUsers: [],
+    reqdUser: {},
   },
 
   reducers: {
     handleLogout: (state) => {
       localStorage.removeItem("token");
       localStorage.removeItem("currentUser");
-      return { ...state, currentUser: {}, token: "" };
+      return { ...state, currentUser: {}, token: "", reqdUser: {} };
     },
     toggleShowLoader: (state, action) => {
       return action.payload === "TRUE"
@@ -149,6 +178,14 @@ export const authSlice = createSlice({
       return {
         ...state,
         currentUser: action.payload,
+      };
+    },
+    storeReqdUser: (state, action) => {
+      console.log(action.payload);
+      localStorage.setItem("reqdUser", JSON.stringify(action.payload));
+      return {
+        ...state,
+        reqdUser: action.payload,
       };
     },
   },
@@ -304,10 +341,40 @@ export const authSlice = createSlice({
     [editUserAsync.rejected]: (state) => {
       state.status = "error";
     },
+    [getAllFollowerOtherUserInfoAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getAllFollowerOtherUserInfoAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      console.log({ data: action.payload.reqdUser });
+      console.log(current(state));
+      if (action.payload && action.payload.success) {
+        state.reqdUser.followers = action.payload.reqdUser;
+      }
+      console.log(current(state));
+      state.showLoader = false;
+    },
+    [getAllFollowerOtherUserInfoAsync.rejected]: (state) => {
+      state.status = "error";
+    },
+    [getAllFollowingOtherUserInfoAsync.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getAllFollowingOtherUserInfoAsync.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+      console.log(current(state));
+      if (action.payload && action.payload.success) {
+        state.reqdUser.following = action.payload.reqdUser;
+      }
+      console.log(current(state));
+      state.showLoader = false;
+    },
+    [getAllFollowingOtherUserInfoAsync.rejected]: (state) => {
+      state.status = "error";
+    },
   },
 });
-
-export const { handleLogout, toggleShowLoader, addUserInfo } =
+export const { handleLogout, toggleShowLoader, addUserInfo, storeReqdUser } =
   authSlice.actions;
 
 export default authSlice.reducer;

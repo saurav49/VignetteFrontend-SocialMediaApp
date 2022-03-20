@@ -36,7 +36,7 @@ const Post = React.forwardRef((props, ref) => {
   return (
     <>
       <div
-        className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2"
+        className="border-2 border-darkCharcoal rounded-lg w-[90%] sm:w-[70%] p-3 bg-darkGrey my-2"
         ref={ref}
       >
         <div className="w-full flex items-center justify-between">

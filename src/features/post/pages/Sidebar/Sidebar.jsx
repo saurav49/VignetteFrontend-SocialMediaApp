@@ -5,7 +5,7 @@ import { cld } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Sidebar = ({ name, username, photo }) => {
+const Sidebar = ({ id, name, username, photo }) => {
   const navigate = useNavigate();
   return (
     <aside className="w-[97%] fixed bottom-3 ml-2 z-10 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-60 border border-darkGrey sm:opacity-100 sm:h-[97%] md:w-[13rem] sm:w-[5rem] py-3 px-4 bg-darkGrey rounded-lg shadow-md sm:flex sm:flex-col sm:justify-between sm:fixed sm:top-2 sm:bottom-1 sm:left-2">
@@ -19,7 +19,9 @@ const Sidebar = ({ name, username, photo }) => {
           <Row icons="home">Home</Row>
           <Row icons="search">Search</Row>
           <Row icons="notifications">Notifications</Row>
-          <Row icons="profile">Profile</Row>
+          <Row icons="profile" userId={id}>
+            Profile
+          </Row>
         </ul>
       </nav>
       <div className="md:flex md:items-center md:justify-between text-white hidden sm:block">
@@ -45,7 +47,7 @@ const Sidebar = ({ name, username, photo }) => {
         </div>
         <button
           className="opacity-50 cursor-pointer hover:opacity-100 hover:bg-darkCharcoal hover:rounded-2xl p-2 transition-colors duration-150 ease-in hidden md:block"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate(`/profile/${id}`)}
         >
           {icons["gear"]}
         </button>
@@ -68,7 +70,7 @@ const Row = (props) => {
         navigate("/notification");
         break;
       case "profile":
-        navigate("/profile");
+        navigate(`/profile/${props.userId}`);
         break;
       default:
         toast.error(

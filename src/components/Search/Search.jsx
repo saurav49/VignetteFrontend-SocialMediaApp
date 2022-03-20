@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Navbar } from "../index";
 import { Sidebar } from "../../features/post/index";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllUserAsync } from "../../features/auth/authSlice";
 import Loader from "react-loader-spinner";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "../../utils";
@@ -12,8 +11,10 @@ import {
   toggleShowLoader,
 } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Search() {
+  const navigate = useNavigate();
   let { currentUser, showLoader, allUsers } = useSelector(
     (state) => state.auth
   );
@@ -22,6 +23,7 @@ function Search() {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
   const [userList, setUserList] = useState([]);
+  console.log();
   const hancleCheckFollowStatus = (userId) => {
     return (
       currentUser.following.find((user) => user._id === userId) !== undefined
@@ -46,18 +48,16 @@ function Search() {
   };
 
   useEffect(() => {
-    dispatch(getAllUserAsync());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (searchText) {
       setUserList(
-        allUsers.filter((user) =>
-          user.name.toLowerCase().includes(searchText.toLowerCase())
+        allUsers.filter(
+          (user) =>
+            user.name.toLowerCase().includes(searchText.toLowerCase()) &&
+            user._id !== currentUser._id
         )
       );
     } else {
-      setUserList(allUsers);
+      setUserList(allUsers.filter((user) => user._id !== currentUser._id));
     }
   }, [searchText, allUsers]);
 
@@ -67,6 +67,7 @@ function Search() {
         name={currentUser.name}
         username={currentUser.username}
         photo={currentUser.photo}
+        id={currentUser._id}
       />
       <div className="w-full flex flex-col sm:ml-24 md:ml-56 items-center overflow-x-hidden pl-1 pr-2 pb-60">
         <Navbar />
@@ -111,9 +112,12 @@ function Search() {
                   return (
                     <div
                       key={user._id}
-                      className="border-2 border-darkGrey rounded-lg w-[90%] p-5 flex items-center bg-darkGrey my-2 mt-3 shadow-md"
+                      className="border-2 border-darkGrey rounded-lg w-[90%] sm:w-[60%] p-5 flex items-center bg-darkGrey my-2 mt-3 shadow-md"
                     >
-                      <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center shadow-md">
+                      <div
+                        className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center shadow-md cursor-pointer"
+                        onClick={() => navigate(`/profile/${user._id}`)}
+                      >
                         {user.photo ? (
                           <AdvancedImage
                             cldImg={cld.image(`${user.photo.id}`)}
@@ -126,7 +130,10 @@ function Search() {
                         )}
                       </div>
                       <div className="flex items-center justify-between w-[85%] ml-4">
-                        <div className="text-white">
+                        <div
+                          className="text-white cursor-pointer"
+                          onClick={() => navigate(`/profile/${user._id}`)}
+                        >
                           <p>{user.name}</p>
                           <p>@{user.username}</p>
                         </div>

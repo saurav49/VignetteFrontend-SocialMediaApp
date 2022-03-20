@@ -14,7 +14,7 @@ import {
 import { Feed, Comment } from "./features/post/index";
 import { Notification } from "./features/notification/index";
 import { useSelector, useDispatch } from "react-redux";
-import { addUserInfo } from "./features/auth/authSlice";
+import { addUserInfo, getAllUserAsync } from "./features/auth/authSlice";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,12 +36,16 @@ function App() {
     })();
   }, [status, token]);
 
-  // initialize user
+  // initialize user in local storage
   useEffect(() => {
     if (currentUser && !currentUser.hasOwnProperty("_id")) {
       dispatch(addUserInfo(JSON.parse(localStorage.getItem("currentUser"))));
     }
   }, [status, currentUser, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAllUserAsync());
+  }, [dispatch]);
 
   return (
     <div className="App">
@@ -69,8 +73,8 @@ function App() {
         <Route path="/notification" element={<PrivateRoute />}>
           <Route path="/notification" element={<Notification />} />
         </Route>
-        <Route path="/profile" element={<PrivateRoute />}>
-          <Route path="/profile" element={<User />} />
+        <Route path="/profile/:id" element={<PrivateRoute />}>
+          <Route path="/profile/:id" element={<User />} />
         </Route>
         <Route path="/follower" element={<PrivateRoute />}>
           <Route path="/follower" element={<Follower />} />

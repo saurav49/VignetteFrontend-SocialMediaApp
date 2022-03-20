@@ -9,6 +9,8 @@ import {
   GET_ALL_USER_API,
   FOLLOW_USER_API,
   EDIT_USER_API,
+  GET_ALL_OTHERUSER_FOLLOWERS_API,
+  GET_ALL_OTHERUSER_FOLLOWING_API,
 } from "../urls";
 import { toast } from "react-toastify";
 
@@ -101,6 +103,59 @@ const getAllFollowerUserInfo = async () => {
     toast.error(error.response.data.errorMessage);
   }
 };
+
+const getAllFollowingOtherUserInfo = async (userId) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.post(GET_ALL_OTHERUSER_FOLLOWING_API, {
+        id: userId,
+      });
+      return response;
+    } else {
+      const response = await axios.post(
+        GET_ALL_OTHERUSER_FOLLOWING_API,
+        { id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMessage);
+  }
+};
+
+const getAllFollowerOtherUserInfo = async (userId) => {
+  try {
+    if (axios.defaults.headers.common["Authorization"]) {
+      const response = await axios.post(GET_ALL_OTHERUSER_FOLLOWERS_API, {
+        id: userId,
+      });
+      return response;
+    } else {
+      const response = await axios.post(
+        GET_ALL_OTHERUSER_FOLLOWERS_API,
+        { id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      return response;
+    }
+  } catch (error) {
+    toast.error(error.response.data.errorMessage);
+  }
+};
+
 const unfollowUser = async (username) => {
   try {
     if (axios.defaults.headers.common["Authorization"]) {
@@ -193,4 +248,6 @@ export {
   getAllUser,
   followUser,
   editUser,
+  getAllFollowingOtherUserInfo,
+  getAllFollowerOtherUserInfo,
 };
