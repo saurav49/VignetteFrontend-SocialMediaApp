@@ -21,8 +21,9 @@ function User() {
   const navigate = useNavigate();
   const { id } = useParams();
   reqdUser = allUsers.find((user) => user._id === id);
-
-  console.log(reqdUser, currentUser);
+  if (typeof reqdUser !== undefined) {
+    reqdUser = currentUser;
+  }
 
   const handleUserClick = (type) => {
     console.log(reqdUser._id, type);
