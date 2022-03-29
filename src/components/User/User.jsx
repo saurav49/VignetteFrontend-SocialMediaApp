@@ -11,19 +11,16 @@ import {
 } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
+import { useState, useEffect } from "react";
 
 function User() {
-  let reqdUser;
+  const [reqdUser, setReqdUser] = useState({});
   let { currentUser, allUsers } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
     (currentUser = JSON.parse(localStorage.getItem("currentUser")));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  reqdUser = allUsers.find((user) => user._id === id);
-  if (typeof reqdUser !== undefined) {
-    reqdUser = currentUser;
-  }
 
   const handleUserClick = (type) => {
     console.log(reqdUser._id, type);
@@ -42,9 +39,20 @@ function User() {
         break;
     }
   };
+
   const handleEditBtn = (currentUser) => {
     navigate("/profile/edit", { state: currentUser });
   };
+
+  useEffect(() => {
+    let updateReqdUser = allUsers.find((user) => user._id === id);
+    setReqdUser(updateReqdUser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, allUsers.length]);
+
+  if (typeof reqdUser === undefined) {
+    setReqdUser(currentUser);
+  }
 
   return (
     <div className="bg-codGray h-full w-screen flex items-center ">
