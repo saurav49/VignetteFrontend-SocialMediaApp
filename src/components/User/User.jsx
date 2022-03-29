@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Sidebar } from "../../features/post/index";
 import { Navbar } from "../../components/index";
@@ -8,10 +7,7 @@ import {
   handleLogout,
   getAllFollowingUserInfoAsync,
   getAllFollowerUserInfoAsync,
-  getAllFollowingOtherUserInfoAsync,
-  getAllFollowerOtherUserInfoAsync,
   toggleShowLoader,
-  storeReqdUser,
 } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";

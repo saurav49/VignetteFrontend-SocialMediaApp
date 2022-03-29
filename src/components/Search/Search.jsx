@@ -24,7 +24,7 @@ function Search() {
   const [searchText, setSearchText] = useState("");
   const [userList, setUserList] = useState([]);
   console.log();
-  const hancleCheckFollowStatus = (userId) => {
+  const handleCheckFollowStatus = (userId) => {
     return (
       currentUser.following.find((user) => user._id === userId) !== undefined
     );
@@ -59,6 +59,7 @@ function Search() {
     } else {
       setUserList(allUsers.filter((user) => user._id !== currentUser._id));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText, allUsers]);
 
   return (
@@ -137,7 +138,7 @@ function Search() {
                           <p>{user.name}</p>
                           <p>@{user.username}</p>
                         </div>
-                        {hancleCheckFollowStatus(user._id) ? (
+                        {handleCheckFollowStatus(user._id) ? (
                           <>
                             {showLoader ? (
                               <Loader
