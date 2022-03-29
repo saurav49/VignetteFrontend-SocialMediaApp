@@ -190,7 +190,7 @@ const UserComment = ({ comment, requiredPost, currentUser }) => {
 
 const RequiredComment = ({ userInfo, comment, requiredPost }) => {
   return (
-    <div className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2">
+    <div className="border-2 border-darkCharcoal rounded-lg w-[90%] sm:w-[70%] p-3 bg-darkGrey my-2">
       <div className="w-full flex items-center">
         <div className="h-16 w-16 rounded-2xl bg-darkCharcoal flex items-center justify-center border border-darkCharcoal shadow-md">
           {userInfo && userInfo.photo && userInfo.photo.id ? (
