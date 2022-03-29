@@ -106,7 +106,7 @@ const Post = React.forwardRef((props, ref) => {
           {props.post.retweet.map((userInfo) => {
             return (
               <div
-                className="border-2 border-darkCharcoal rounded-lg w-[95%] p-3 bg-darkGrey my-2"
+                className="border-2 border-darkCharcoal rounded-lg w-[90%] sm:w-[70%] p-3 bg-darkGrey my-2"
                 key={userInfo._id}
               >
                 <div className="flex items-center mb-4 ml-1 mt-2 text-white opacity-70 text-sm">
