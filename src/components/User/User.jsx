@@ -12,7 +12,7 @@ import {
 } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 function User() {
   let { currentUser, allUsers } = useSelector((state) => state.auth);
