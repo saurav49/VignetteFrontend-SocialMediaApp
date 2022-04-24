@@ -156,6 +156,7 @@ export const authSlice = createSlice({
     status: "idle",
     error: "",
     showLoader: false,
+    authBtnLoader: false,
     token: "",
     userId: "",
     currentUser: {},
@@ -165,8 +166,8 @@ export const authSlice = createSlice({
 
   reducers: {
     handleLogout: (state) => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("currentUser");
+      localStorage.removeItem("vignette__token");
+      localStorage.removeItem("vignette__currentUser");
       return { ...state, currentUser: {}, token: "", reqdUser: {} };
     },
     toggleShowLoader: (state, action) => {
@@ -182,11 +183,19 @@ export const authSlice = createSlice({
     },
     storeReqdUser: (state, action) => {
       console.log(action.payload);
-      localStorage.setItem("reqdUser", JSON.stringify(action.payload));
+      localStorage.setItem(
+        "vignette__reqdUser",
+        JSON.stringify(action.payload)
+      );
       return {
         ...state,
         reqdUser: action.payload,
       };
+    },
+    toggleAuthBtnLoader: (state, action) => {
+      return action.payload === "TRUE"
+        ? { ...state, authBtnLoader: true }
+        : { ...state, authBtnLoader: false };
     },
   },
 
@@ -197,9 +206,12 @@ export const authSlice = createSlice({
     [signUpUser.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        localStorage.setItem("token", JSON.stringify(action.payload.token));
         localStorage.setItem(
-          "currentUser",
+          "vignette__token",
+          JSON.stringify(action.payload.token)
+        );
+        localStorage.setItem(
+          "vignette__currentUser",
           JSON.stringify(action.payload.savedUser)
         );
         state.userId = action.payload.savedUser._id;
@@ -207,10 +219,12 @@ export const authSlice = createSlice({
         state.currentUser = action.payload.savedUser;
       }
       state.showLoader = false;
+      state.authBtnLoader = false;
     },
     [signUpUser.rejected]: (state, action) => {
       state.status = "error";
       state.error = action.error.message;
+      state.authBtnLoader = false;
     },
     [loginUserWithCredentials.pending]: (state) => {
       state.status = "loading";
@@ -218,9 +232,12 @@ export const authSlice = createSlice({
     [loginUserWithCredentials.fulfilled]: (state, action) => {
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
-        localStorage.setItem("token", JSON.stringify(action.payload.token));
         localStorage.setItem(
-          "currentUser",
+          "vignette__token",
+          JSON.stringify(action.payload.token)
+        );
+        localStorage.setItem(
+          "vignette__currentUser",
           JSON.stringify(action.payload.savedUser)
         );
         state.userId = action.payload.savedUser._id;
@@ -228,10 +245,12 @@ export const authSlice = createSlice({
         state.currentUser = action.payload.savedUser;
       }
       state.showLoader = false;
+      state.authBtnLoader = false;
     },
     [loginUserWithCredentials.rejected]: (state, action) => {
       state.status = "error";
       state.error = action.error.message;
+      state.authBtnLoader = false;
     },
     [getUser.pending]: (state) => {
       state.status = "loading";
@@ -240,7 +259,7 @@ export const authSlice = createSlice({
       state.status = "fulfilled";
       if (action.payload && action.payload.success) {
         localStorage.setItem(
-          "currentUser",
+          "vignette__currentUser",
           JSON.stringify(action.payload.savedUser)
         );
         state.userId = action.payload.savedUser._id;
@@ -333,7 +352,10 @@ export const authSlice = createSlice({
           (state.currentUser.website = action.payload.updatedDoc.website);
         action.payload.updatedDoc?.photo &&
           (state.currentUser.photo = action.payload.updatedDoc.photo);
-        localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
+        localStorage.setItem(
+          "vignette__currentUser",
+          JSON.stringify(state.currentUser)
+        );
         console.log({ currentUser: state.currentUser });
       }
       state.showLoader = false;
@@ -374,7 +396,12 @@ export const authSlice = createSlice({
     },
   },
 });
-export const { handleLogout, toggleShowLoader, addUserInfo, storeReqdUser } =
-  authSlice.actions;
+export const {
+  handleLogout,
+  toggleShowLoader,
+  addUserInfo,
+  storeReqdUser,
+  toggleAuthBtnLoader,
+} = authSlice.actions;
 
 export default authSlice.reducer;

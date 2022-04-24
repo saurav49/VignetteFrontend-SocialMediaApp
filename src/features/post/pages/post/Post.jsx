@@ -24,7 +24,7 @@ const Post = React.forwardRef((props, ref) => {
 
   let { currentUser } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
 
   const handleDeletePost = (postId) => {
     dispatch(toggleDeleteModal("TRUE"));

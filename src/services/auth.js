@@ -76,7 +76,9 @@ const getAllFollowingUserInfo = async () => {
     } else {
       const response = await axios.get(GET_ALL_FOLLOWING_API, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -94,7 +96,9 @@ const getAllFollowerUserInfo = async () => {
     } else {
       const response = await axios.get(GET_ALL_FOLLOWERS_API, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -118,7 +122,7 @@ const getAllFollowingOtherUserInfo = async (userId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -144,7 +148,7 @@ const getAllFollowerOtherUserInfo = async (userId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -164,7 +168,9 @@ const unfollowUser = async (username) => {
     } else {
       const response = await axios.get(`${UNFOLLOW_USER_API}/${username}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -182,7 +188,9 @@ const getAllUser = async () => {
     } else {
       const response = await axios.get(GET_ALL_USER_API, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -200,7 +208,9 @@ const followUser = async (username) => {
     } else {
       const response = await axios.get(`${FOLLOW_USER_API}/${username}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -226,7 +236,7 @@ const editUser = async (userInfo) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }

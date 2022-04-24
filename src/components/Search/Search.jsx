@@ -19,7 +19,7 @@ function Search() {
     (state) => state.auth
   );
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
   const [userList, setUserList] = useState([]);

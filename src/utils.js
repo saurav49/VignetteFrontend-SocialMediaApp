@@ -47,7 +47,7 @@ const getOtherUserFollowingInfo = async (userId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -73,7 +73,7 @@ const getOtherUserFollowerInfo = async (userId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }

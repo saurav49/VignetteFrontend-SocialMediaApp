@@ -22,7 +22,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App() {
   const { status, currentUser } = useSelector((state) => state.auth);
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = JSON.parse(localStorage.getItem("vignette__token"));
   const dispatch = useDispatch();
 
   // add token to header if present
@@ -39,13 +39,15 @@ function App() {
   // initialize user in local storage
   useEffect(() => {
     if (currentUser && !currentUser.hasOwnProperty("_id")) {
-      dispatch(addUserInfo(JSON.parse(localStorage.getItem("currentUser"))));
+      dispatch(
+        addUserInfo(JSON.parse(localStorage.getItem("vignette__currentUser")))
+      );
     }
   }, [status, currentUser, dispatch]);
 
   useEffect(() => {
-    dispatch(getAllUserAsync());
-  }, [dispatch]);
+    token && dispatch(getAllUserAsync());
+  }, [dispatch, token]);
 
   return (
     <div className="App">

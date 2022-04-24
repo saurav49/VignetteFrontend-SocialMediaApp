@@ -9,7 +9,9 @@ const getAllNotificationOfCurrentUser = async () => {
     } else {
       const response = await axios.get(`${NOTIFICATION_API}/`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -32,7 +34,7 @@ const deleteNotification = async (notificationId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }

@@ -6,7 +6,7 @@ import { useNavigate, Navigate } from "react-router";
 import { validateEmail, validatePassword, isMatch } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "react-loader-spinner";
-import { toggleShowLoader } from "./authSlice";
+import { toggleAuthBtnLoader } from "./authSlice";
 import { Navbar } from "../../components/index";
 
 const Signup = () => {
@@ -22,15 +22,15 @@ const Signup = () => {
   const [previewImage, setPreviewImage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let { showLoader, status, token } = useSelector((state) => state.auth);
-  !token && (token = JSON.parse(localStorage.getItem("token")));
+  let { authBtnLoader, status, token } = useSelector((state) => state.auth);
+  !token && (token = JSON.parse(localStorage.getItem("vignette__token")));
 
   useEffect(() => {
-    status === "loading" && dispatch(toggleShowLoader("TRUE"));
+    status === "loading" && dispatch(toggleAuthBtnLoader("TRUE"));
     if (status === "fulfilled") {
-      dispatch(toggleShowLoader("FALSE"));
+      dispatch(toggleAuthBtnLoader("FALSE"));
     }
-    status === "error" && dispatch(toggleShowLoader("FALSE"));
+    status === "error" && dispatch(toggleAuthBtnLoader("FALSE"));
   }, [status, dispatch]);
 
   const handleSubmit = (e) => {
@@ -181,7 +181,7 @@ const Signup = () => {
                 type="submit"
                 className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-3 px-10 border-b-4 my-4 border-slate-700 hover:border-slate-500 rounded uppercase"
               >
-                {showLoader ? (
+                {authBtnLoader ? (
                   <Loader
                     type="ThreeDots"
                     color="#fff"

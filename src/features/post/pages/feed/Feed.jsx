@@ -29,7 +29,7 @@ const Feed = () => {
   );
   let { currentUser } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
 
   // if currentUser returns null, logout
   if (!currentUser) {

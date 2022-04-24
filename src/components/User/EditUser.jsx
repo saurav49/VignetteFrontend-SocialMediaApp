@@ -10,7 +10,7 @@ import Loader from "react-loader-spinner";
 function EditUser() {
   let { currentUser, showLoader } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
   const [editUsername, setEditUsername] = useState(currentUser.name);
   const [editBio, setEditBio] = useState(currentUser.bio);
   const [editUrl, setEditUrl] = useState(currentUser.website);
@@ -176,7 +176,7 @@ const ImageModal = ({ previewImage, setShowModal }) => {
     setShowModal(false);
   };
   return (
-    <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center ">
+    <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50">
       <div className="flex items-center justify-center flex-col w-[300px] sm:w-[50%] md:w-[35%] py-2 bg-white text-slate-900 rounded-md shadow-md py-8 px-4 absolute">
         <h2 className="text-xl text-slate-600">Image Preview</h2>
         {previewImage ? (

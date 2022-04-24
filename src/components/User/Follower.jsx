@@ -11,7 +11,7 @@ import { toggleShowLoader } from "../../features/auth/authSlice";
 function Follower() {
   let { currentUser, showLoader } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
   const dispatch = useDispatch();
 
   useEffect(() => {

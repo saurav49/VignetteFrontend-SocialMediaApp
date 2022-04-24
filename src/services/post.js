@@ -28,7 +28,7 @@ const createPost = async (postContent, previewPostImage) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -50,7 +50,7 @@ const getAllPost = async (cursor) => {
         const response = await axios.get(`${GET_ALL_POST}/?cursor=${cursor}`, {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         });
@@ -64,7 +64,7 @@ const getAllPost = async (cursor) => {
         const response = await axios.get(GET_ALL_POST, {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         });
@@ -73,8 +73,8 @@ const getAllPost = async (cursor) => {
     }
   } catch (error) {
     toast.error(error.response.data.errorMessage);
-    localStorage.removeItem("token");
-    localStorage.removeItem("currentUser");
+    localStorage.removeItem("vignette__token");
+    localStorage.removeItem("vignette__currentUser");
   }
 };
 
@@ -94,7 +94,7 @@ const addCommentToDb = async (commentContent, postId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -122,7 +122,7 @@ const addDownvoteCommentDb = async (postId, commentId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -150,7 +150,7 @@ const addUpvoteToCommentDb = async (postId, commentId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -172,7 +172,9 @@ const likePostToDb = async (postId) => {
     } else {
       const response = await axios.post(`${LIKE_POST_API}/${postId}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -190,7 +192,9 @@ const retweetPostToDb = async (postId) => {
     } else {
       const response = await axios.post(`${RETWEET_POST_API}/${postId}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -208,7 +212,9 @@ const unlikePostToDb = async (postId) => {
     } else {
       const response = await axios.post(`${UNLIKE_POST_API}/${postId}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -229,7 +235,7 @@ const removeRetweetPostToDb = async (postId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }
@@ -249,7 +255,9 @@ const deletePost = async (postId) => {
     } else {
       const response = await axios.delete(`${POST_API}/${postId}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("vignette__token")
+          )}`,
         },
       });
       return response;
@@ -273,7 +281,7 @@ const removeCommentDb = async (commentId, postId) => {
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("vignette__token")
             )}`,
           },
         }

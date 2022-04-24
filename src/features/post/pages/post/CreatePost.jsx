@@ -18,7 +18,7 @@ const CreatePost = ({ type, id, placeholder }) => {
   let { currentUser } = useSelector((state) => state.auth);
   const { createPostBtnLoading } = useSelector((state) => state.post);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
 
   const handlePostContent = (e) => {
     setPostContent(e.target.value);

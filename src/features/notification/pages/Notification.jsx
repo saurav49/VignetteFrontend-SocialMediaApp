@@ -16,7 +16,7 @@ function Notification() {
   );
   const dispatch = useDispatch();
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
   useEffect(() => {
     dispatch(toggleNotificationLoader("TRUE"));
     dispatch(getAllNotificationAsync());
@@ -65,7 +65,7 @@ const NotificationSnippet = (props) => {
   const dispatch = useDispatch();
   switch (props.actionType) {
     case "FOLLOWING":
-      actionType = "is follwoing you";
+      actionType = "is following you";
       break;
     case "COMMENT":
       actionType = "has commented on your tweet";

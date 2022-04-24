@@ -8,22 +8,21 @@ import {
   getAllFollowingUserInfoAsync,
   getAllFollowerUserInfoAsync,
   toggleShowLoader,
+  getAllUserAsync,
 } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 function User() {
-  const [reqdUser, setReqdUser] = useState({});
   let { currentUser, allUsers } = useSelector((state) => state.auth);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
   const handleUserClick = (type) => {
-    console.log(reqdUser._id, type);
     switch (type) {
       case "FOLLOWING":
         dispatch(toggleShowLoader("TRUE"));
@@ -44,14 +43,15 @@ function User() {
     navigate("/profile/edit", { state: currentUser });
   };
 
-  useEffect(() => {
-    let updateReqdUser = allUsers.find((user) => user._id === id);
-    setReqdUser(updateReqdUser);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, allUsers.length]);
+  let reqdUser = allUsers.find((user) => user._id === id);
 
-  if (typeof reqdUser === undefined) {
-    setReqdUser(currentUser);
+  useEffect(() => {
+    dispatch(getAllUserAsync());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!reqdUser) {
+    reqdUser = currentUser;
   }
 
   return (

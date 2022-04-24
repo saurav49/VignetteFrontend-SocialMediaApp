@@ -18,7 +18,7 @@ const Comment = () => {
   let { currentUser } = useSelector((state) => state.auth);
   const [requiredPost, setRequiredPost] = useState(null);
   !currentUser.hasOwnProperty("_id") &&
-    (currentUser = JSON.parse(localStorage.getItem("currentUser")));
+    (currentUser = JSON.parse(localStorage.getItem("vignette__currentUser")));
 
   useEffect(() => {
     dispatch(fetchAllPostAsync({ cursor, hasMore }));
